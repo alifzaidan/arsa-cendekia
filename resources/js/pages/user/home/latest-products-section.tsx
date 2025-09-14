@@ -113,7 +113,7 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
     const availableProducts = safeLatestProducts.filter((product) => !hasAccess(product));
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 py-8">
+        <section className="mx-auto w-full max-w-7xl px-4">
             <div className="mx-auto text-center">
                 <p className="mx-auto mb-2 font-medium text-gray-500">Produk Kami</p>
                 <h2 className="mx-auto mb-8 max-w-2xl text-3xl font-bold md:text-4xl">Jelajahi Produk Terbaru Kami</h2>
@@ -122,7 +122,7 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
                         if (safeLatestProducts.length === 0) {
                             return (
                                 <div className="col-span-full flex flex-col items-center justify-center gap-4 py-12">
-                                    <img src="/assets/images/not-found.webp" alt="Produk Belum Tersedia" className="w-48" />
+                                    <img src="/assets/images/not-found.webp" alt="Produk Belum Tersedia" className="w-52" />
                                     <div className="text-center text-gray-500">Belum ada produk yang tersedia saat ini.</div>
                                 </div>
                             );
@@ -185,11 +185,13 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
                         ));
                     })()}
                 </div>
-                <Button className="mt-8" variant="outline" asChild>
-                    <Link href="/course">
-                        Lihat Semua Produk <MoveRight />
-                    </Link>
-                </Button>
+                {availableProducts.length > 0 && (
+                    <Button className="my-8" variant="outline" asChild>
+                        <Link href="/course">
+                            Lihat Semua Produk <MoveRight />
+                        </Link>
+                    </Button>
+                )}
             </div>
         </section>
     );

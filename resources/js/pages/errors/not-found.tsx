@@ -7,16 +7,16 @@ export default function PageNotFound() {
         <div className="flex min-h-screen items-center justify-center bg-white dark:bg-gray-900">
             <Head title="Page Not Found" />
             <div className="container flex flex-col items-center justify-center py-12 text-center">
-                <img src="/assets/images/404-light.webp" alt="Page not found" className="mb-8 block max-w-[300px] dark:hidden" />
-                <img src="/assets/images/404-dark.webp" alt="Page not found" className="mb-8 hidden max-w-[300px] dark:block" />
+                <img src="/assets/images/404-light.webp" alt="Page not found" className="mb-4 block max-w-[300px] dark:hidden" />
+                <img src="/assets/images/404-dark.webp" alt="Page not found" className="mb-4 hidden max-w-[300px] dark:block" />
 
-                <p className="mb-8 max-w-md text-base text-gray-600 dark:text-gray-400">Maaf, halaman yang Anda cari tidak ditemukan.</p>
+                <p className="mb-6 max-w-md text-base text-gray-600 dark:text-gray-400">Maaf, halaman yang Anda cari tidak ditemukan.</p>
 
                 <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                    <Button asChild size="lg">
+                    <Button variant="outline" asChild>
                         <Link href="/">
                             <Home className="mr-2 h-5 w-5" />
-                            Back to Home
+                            Kembali ke Beranda
                         </Link>
                     </Button>
                 </div>

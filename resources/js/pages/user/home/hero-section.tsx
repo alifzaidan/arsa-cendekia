@@ -43,7 +43,7 @@ export default function HeroSection() {
                     </div>
 
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
-                        <img src="assets/images/hero-illustration.png" alt="Ilustrasi Hero" />
+                        <img src="assets/images/hero-illustration.webp" alt="Ilustrasi Hero" />
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@ export default function FaqSection() {
                 <p className="mx-auto max-w-4xl text-sm text-gray-500 md:text-base">Beberapa pertanyaan yang sering diajukan oleh pengguna.</p>
             </div>
             <div className="flex items-center justify-center gap-8">
-                <img src="/assets/images/faq-illustration.png" alt="Ilustrasi FAQ" className="hidden h-[350px] w-auto md:block" />
+                <img src="/assets/images/faq-illustration.webp" alt="Ilustrasi FAQ" className="hidden h-[350px] w-auto md:block" />
                 <Accordion
                     className="flex w-full flex-col gap-2 divide-y divide-zinc-200 dark:divide-zinc-700"
                     transition={{ duration: 0.2, ease: 'easeInOut' }}
