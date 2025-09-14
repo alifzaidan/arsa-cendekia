@@ -1,6 +1,6 @@
 import { OtherItem, ProductItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Instagram, Linkedin } from 'lucide-react';
+import { Instagram, Mail, Phone } from 'lucide-react';
 
 const productItems: ProductItem[] = [
     {
@@ -30,20 +30,17 @@ const otherItems: OtherItem[] = [
 
 export default function AppFooter() {
     return (
-        <footer className="from-primary/80 to-background bg-gradient-to-t py-8 sm:py-16">
-            <div className="mx-auto grid max-w-7xl gap-8 px-4 text-sm sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
+        <footer className="from-primary to-tertiary rounded-t-4xl bg-gradient-to-r pt-8 pb-28 text-white lg:pb-8">
+            <div className="mx-auto grid max-w-7xl gap-8 px-4 text-sm sm:grid-cols-2 sm:gap-12 lg:grid-cols-2">
                 <div>
                     {/* Logo untuk light mode */}
                     <img src="/assets/images/logo-primary.png" alt="Logo Arsa Cendekia" className="block w-24 fill-current dark:hidden" />
                     {/* Logo untuk dark mode */}
                     <img src="/assets/images/logo-secondary.png" alt="Logo Arsa Cendekia" className="hidden w-24 fill-current dark:block" />
-                    <p className="my-4">Maju Bersama Arsa Cendekia</p>
                     <h5 className="font-semibold">CV. Arsa Cendekia</h5>
-                    <p className="text-gray-800 dark:text-gray-400">
-                        Karangploso, Kabupaten Malang Prov. Jawa Timur <br /> +6282241477053
-                    </p>
+                    <p className="mt-4">Berkembang Bersama Arsa Cendekia💡</p>
                 </div>
-                <div className="flex gap-8 sm:gap-12">
+                <div className="flex gap-8 sm:gap-12 lg:justify-end">
                     <div>
                         <h4 className="mb-4 font-semibold">Produk</h4>
                         <ul className="space-y-2">
@@ -68,18 +65,25 @@ export default function AppFooter() {
                             ))}
                         </ul>
                     </div>
-                </div>
-                <div className="sm:text-right">
-                    <h4 className="mb-4 font-semibold">Media Sosial</h4>
-                    <div className="flex items-center gap-4 sm:justify-end">
-                        <a href="https://www.instagram.com/arsacendekia/" target="_blank">
-                            <Instagram />
-                        </a>
-                        <a href="https://www.linkedin.com/company/arsacendekia" target="_blank">
-                            <Linkedin />
-                        </a>
+                    <div>
+                        <h4 className="mb-4 font-semibold">Kontak</h4>
+                        <div className="space-y-4">
+                            <a href="mailto:arsacendekia@gmail.com" target="_blank" className="flex items-center gap-2" rel="noopener noreferrer">
+                                <Mail className="h-4 w-4" /> arsacendekia@gmail.com
+                            </a>
+                            <a href="https://wa.me/+6282241477053" target="_blank" className="flex items-center gap-2" rel="noopener noreferrer">
+                                <Phone className="h-4 w-4" /> +6282241477053
+                            </a>
+                            <a
+                                href="https://www.instagram.com/arsacendekia/"
+                                target="_blank"
+                                className="flex items-center gap-2"
+                                rel="noopener noreferrer"
+                            >
+                                <Instagram className="h-4 w-4" /> @arsacendekia
+                            </a>
+                        </div>
                     </div>
-                    <p className="mt-4">Ikuti kami di media sosial untuk mendapatkan informasi terbaru.</p>
                 </div>
             </div>
             <div className="mt-12 text-center text-xs">&copy; 2025 CV. Arsa Cendekia. All rights reserved.</div>

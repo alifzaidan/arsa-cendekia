@@ -1,145 +1,65 @@
-import { Button } from '@/components/ui/button';
 import { InfiniteSlider } from '@/components/ui/infinite-slider';
-import { Link } from '@inertiajs/react';
 import { User } from 'lucide-react';
+
+const testimonies = [
+    {
+        name: 'Rina S.',
+        text: 'Pelatihannya sangat membantu saya memahami perpajakan dengan mudah. Mentor ramah dan profesional!',
+        job: 'Mahasiswa Akuntansi',
+    },
+    {
+        name: 'Budi P.',
+        text: 'Materi yang diberikan sangat relevan dengan kebutuhan industri. Saya jadi lebih percaya diri.',
+        job: 'Staf Keuangan',
+    },
+    {
+        name: 'Siti L.',
+        text: 'Akses fleksibel membuat saya bisa belajar di sela-sela kesibukan kerja. Sangat direkomendasikan!',
+        job: 'Karyawan Swasta',
+    },
+    {
+        name: 'Andi M.',
+        text: 'Sertifikat resmi dari Arsa Cendekia sangat membantu karir saya di bidang perpajakan.',
+        job: 'Konsultan Pajak',
+    },
+    {
+        name: 'Dewi T.',
+        text: 'Mentor yang expert dan materi terupdate membuat saya cepat paham dan siap menghadapi ujian.',
+        job: 'Mahasiswa',
+    },
+];
+
+const userBgColors = ['bg-primary/20', 'bg-yellow-200', 'bg-green-200', 'bg-pink-200', 'bg-blue-200', 'bg-purple-200'];
 
 export default function TestimonySection() {
     return (
-        <section className="to-primary my-8 hidden w-full bg-gradient-to-tl from-black lg:block">
-            <div className="mx-auto flex w-full max-w-7xl items-center gap-8 md:gap-12">
-                <div className="mx-4">
-                    <p className="text-secondary mx-auto mb-2 font-medium md:text-lg">Terpercaya lebih dari 1000+ alumni</p>
-                    <h2 className="mx-auto mb-4 text-3xl font-bold text-white italic md:text-4xl">Bergabung bersama komunitas supportif kami 💪</h2>
-                    <p className="mx-auto text-zinc-200">
-                        Arsa Cendekia menyediakan komunitas belajar berbagai disiplin ilmu untuk pemula ke mahir. Dapatkan dukungan, berbagi
-                        pengalaman, dan tumbuh bersama dalam perjalanan belajar Anda.
-                    </p>
-                    <Button variant="secondary" className="mt-4" asChild>
-                        <Link href="/course">Gabung Sekarang</Link>
-                    </Button>
-                </div>
-                <div className="flex h-[500px]">
-                    <InfiniteSlider direction="vertical" speed={50} speedOnHover={20} gap={24} className="p-4">
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-blue-100 p-2">
-                                    <User className="h-4 w-4 text-blue-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Sarah Wijaya</h3>
-                                    <p className="text-xs text-gray-500">UI/UX Designer</p>
-                                </div>
+        <section className="mx-auto w-full space-y-6 lg:space-y-12 lg:py-8">
+            <div className="px-4 text-left md:text-center">
+                <h2 className="mx-auto mb-4 text-3xl font-bold md:text-4xl">Testimoni Alumni</h2>
+                <p className="mx-auto max-w-4xl text-sm text-gray-500 md:text-base">
+                    Berikut adalah beberapa testimoni dari alumni yang telah mengikuti pelatihan di Arsa Cendekia.
+                </p>
+            </div>
+            <div className="mt-8">
+                <InfiniteSlider gap={24} speed={0.5} className="w-full">
+                    {testimonies.map((item, idx) => (
+                        <div
+                            key={idx}
+                            className="m-2 flex max-w-xs min-w-[300px] flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-6 shadow-md dark:border-zinc-800"
+                        >
+                            <div
+                                className={`${userBgColors[idx % userBgColors.length]} mb-3 flex h-12 w-12 items-center justify-center rounded-full`}
+                            >
+                                <User className="text-primary h-7 w-7" />
                             </div>
-                            <p className="text-sm text-gray-500">
-                                "Materi bootcamp UI/UX di Arsa Cendekia sangat komprehensif. Sekarang saya sudah bekerja di startup unicorn. Terima
-                                kasih Arsa Cendekia!"
-                            </p>
-                        </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-green-100 p-2">
-                                    <User className="h-4 w-4 text-green-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Budi Santoso</h3>
-                                    <p className="text-xs text-gray-500">Full Stack Developer</p>
-                                </div>
+                            <p className="mb-2 text-center text-base text-gray-700 italic">"{item.text}"</p>
+                            <div className="mt-2 text-center">
+                                <span className="text-primary block font-semibold">{item.name}</span>
+                                <span className="block text-xs text-gray-500">{item.job}</span>
                             </div>
-                            <p className="text-sm text-gray-500">
-                                "Dari nol sampai bisa bikin aplikasi web kompleks. Mentor di Arsa Cendekia sangat sabar dan supportif. Worth it
-                                banget!"
-                            </p>
                         </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-purple-100 p-2">
-                                    <User className="h-4 w-4 text-purple-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Rina Kartika</h3>
-                                    <p className="text-xs text-gray-500">Digital Marketer</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Kelas digital marketing-nya game changer! Bisnis online saya sekarang omzetnya naik 300% dalam 6 bulan."
-                            </p>
-                        </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-orange-100 p-2">
-                                    <User className="h-4 w-4 text-orange-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Ahmad Rizky</h3>
-                                    <p className="text-xs text-gray-500">Data Analyst</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Transisi karir dari accounting ke data analyst jadi lebih mudah berkat bootcamp di Arsa Cendekia. Materinya sangat
-                                aplikatif!"
-                            </p>
-                        </div>
-                    </InfiniteSlider>
-                    <InfiniteSlider direction="vertical" speed={50} speedOnHover={20} gap={24} className="p-4" reverse>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-pink-100 p-2">
-                                    <User className="h-4 w-4 text-pink-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Maya Sari</h3>
-                                    <p className="text-xs text-gray-500">Product Manager</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Webinar product management-nya eye opening banget! Sekarang saya lebih percaya diri memimpin tim produk di
-                                perusahaan."
-                            </p>
-                        </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-cyan-100 p-2">
-                                    <User className="h-4 w-4 text-cyan-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Denny Pratama</h3>
-                                    <p className="text-xs text-gray-500">DevOps Engineer</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Kelas DevOps-nya sangat detail dan praktis. Dari basic Docker sampai Kubernetes semua dijelaskan dengan baik."
-                            </p>
-                        </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-indigo-100 p-2">
-                                    <User className="h-4 w-4 text-indigo-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Lisa Anggraini</h3>
-                                    <p className="text-xs text-gray-500">Content Creator</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Belajar video editing dan content strategy di Arsa Cendekia bikin channel YouTube saya tembus 100k subscriber!"
-                            </p>
-                        </div>
-                        <div className="max-w-sm space-y-2 rounded-lg bg-white p-4 shadow-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-full bg-yellow-100 p-2">
-                                    <User className="h-4 w-4 text-yellow-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Fajar Ramadhan</h3>
-                                    <p className="text-xs text-gray-500">Mobile Developer</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                "Bootcamp Flutter-nya recommended banget! Sekarang saya bisa develop aplikasi mobile untuk iOS dan Android."
-                            </p>
-                        </div>
-                    </InfiniteSlider>
-                </div>
+                    ))}
+                </InfiniteSlider>
             </div>
         </section>
     );

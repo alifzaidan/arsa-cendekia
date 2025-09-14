@@ -22,15 +22,6 @@ class HomeController extends Controller
             session(['referral_code' => $referralCode]);
         }
 
-        $tools = Tool::all();
-
-        // Ambil promotion yang aktif
-        $activePromotion = Promotion::where('is_active', true)
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->latest()
-            ->first();
-
         // Ambil data dari ketiga model
         $courses = Course::with(['category'])
             ->where('status', 'published')
@@ -81,19 +72,6 @@ class HomeController extends Controller
             ->take(6)
             ->values();
 
-        // Ambil semua produk untuk fake notifications (tidak hanya 6 teratas)
-        $allProducts = collect()
-            ->merge($courses)
-            ->merge($webinars)
-            ->map(function ($product) {
-                return [
-                    'id' => $product['id'],
-                    'title' => $product['title'],
-                    'type' => $product['type'],
-                    'price' => $product['price'],
-                ];
-            });
-
         $myProductIds = [
             'courses' => [],
             'webinars' => [],
@@ -131,11 +109,8 @@ class HomeController extends Controller
         }
 
         return Inertia::render('user/home/index', [
-            'tools' => $tools,
             'latestProducts' => $latestProducts,
             'myProductIds' => $myProductIds,
-            'allProducts' => $allProducts,
-            'activePromotion' => $activePromotion,
             'referralInfo' => [
                 'code' => session('referral_code'),
                 'hasActive' => session('referral_code') && session('referral_code') !== 'ATM2025',

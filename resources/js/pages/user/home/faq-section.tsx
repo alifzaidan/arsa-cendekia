@@ -1,87 +1,82 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ChevronUp } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 
 export default function FaqSection() {
     const [expanded, setExpanded] = useState<React.Key | null>('getting-started');
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 py-8">
-            <div className="mx-auto text-center">
-                <p className="text-primary bg-background border-primary mx-auto mb-4 w-fit rounded-full border bg-gradient-to-t from-[#D9E5FF] to-white px-4 py-1 text-sm font-medium shadow-xs">
-                    Pertanyaan yang sering ditanyakan
-                </p>
-                <h2 className="dark:text-primary-foreground mx-auto mb-8 max-w-2xl text-3xl font-bold italic md:text-4xl">FAQ</h2>
+        <section className="mx-auto w-full max-w-7xl px-4 py-12">
+            <div className="mb-8 text-left md:mb-2 md:text-center">
+                <h2 className="mx-auto mb-4 text-3xl font-bold md:text-4xl">Apa Yang Mereka Tanyakan</h2>
+                <p className="mx-auto max-w-4xl text-sm text-gray-500 md:text-base">Beberapa pertanyaan yang sering diajukan oleh pengguna.</p>
             </div>
-            <Accordion
-                className="flex w-full flex-col gap-2 divide-y divide-zinc-200 dark:divide-zinc-700"
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                expandedValue={expanded}
-                onValueChange={setExpanded}
-            >
-                <AccordionItem value="getting-started" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
-                    <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
-                        <div className="flex items-center justify-between">
-                            <p className="md:text-lg">Apa itu CV. Arsa Cendekia?</p>
-                            <ChevronUp className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
-                            Arsa Cendekia adalah platform edukasi digital yang dikembangkan oleh CV. Arsa Cendekia dan dirancang untuk mendukung
-                            pengembangan skill di era modern mulai dari teknologi, desain, hingga bisnis.
-                        </p>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="animation-properties" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
-                    <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
-                        <div className="flex items-center justify-between">
-                            <p className="md:text-lg">Apa saja fitur yang tersedia di CV. Arsa Cendekia?</p>
-                            <ChevronUp className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
-                            CV. Arsa Cendekia menawarkan berbagai fitur seperti Kelas Online dan pelatihan dalam bentuk Webinar yang mencakup berbagai
-                            disiplin ilmu. Setiap fitur dirancang untuk memberikan pengalaman belajar yang interaktif dan mendalam, memungkinkan
-                            pengguna untuk mengembangkan keterampilan mereka secara efektif.
-                        </p>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="advanced-usage" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
-                    <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
-                        <div className="flex items-center justify-between">
-                            <p className="md:text-lg">Bagaimana alur belajar di Arsa Cendekia?</p>
-                            <ChevronUp className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
-                            Alur belajar di Arsa Cendekia dimulai dengan memilih kelas atau webinar yang sesuai dengan minat dan kebutuhan Anda.
-                            Setelah mendaftar, Anda akan mendapatkan akses ke materi pembelajaran yang dapat diakses kapan saja. Setiap kelas
-                            dilengkapi dengan modul, quiz, dan forum diskusi untuk mendukung proses belajar Anda.
-                        </p>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="community-and-support" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
-                    <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
-                        <div className="flex items-center justify-between">
-                            <p className="md:text-lg">Kemana saya bisa mendapatkan informasi lebih lanjut tentang CV. Arsa Cendekia?</p>
-                            <ChevronUp className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
-                            Untuk informasi lebih lanjut tentang CV. Arsa Cendekia, Anda dapat menghubungi admin kami di{' '}
-                            <a href="https://wa.me/+6282241477053" className="text-primary hover:underline">
-                                +6282241477053
-                            </a>
-                            . Kami juga aktif di media sosial, jadi pastikan untuk mengikuti kami di platform seperti Instagram, Tiktok, dan Linkedin
-                            untuk update terbaru dan tips belajar.
-                        </p>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+            <div className="flex items-center justify-center gap-8">
+                <img src="/assets/images/faq-illustration.png" alt="Ilustrasi FAQ" className="hidden h-[350px] w-auto md:block" />
+                <Accordion
+                    className="flex w-full flex-col gap-2 divide-y divide-zinc-200 dark:divide-zinc-700"
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    expandedValue={expanded}
+                    onValueChange={setExpanded}
+                >
+                    <AccordionItem value="beginner-allowed" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
+                        <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
+                            <div className="flex items-center justify-between">
+                                <p className="md:text-lg">Apakah seorang pemula bisa ikut belajar?</p>
+                                <Plus className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
+                                Tentu saja! Semua kelas dan webinar di Arsa Cendekia dirancang agar mudah diikuti oleh pemula. Materi disusun dari
+                                dasar hingga tingkat lanjut, sehingga siapa pun dapat belajar tanpa pengalaman sebelumnya.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="free-class" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
+                        <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
+                            <div className="flex items-center justify-between">
+                                <p className="md:text-lg">Apakah ada kelas gratis?</p>
+                                <Plus className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
+                                Ya, kami menyediakan beberapa kelas gratis yang dapat diakses oleh semua pengguna. Silakan cek halaman kelas untuk
+                                melihat daftar kelas gratis yang tersedia.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="interactive-group" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
+                        <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
+                            <div className="flex items-center justify-between">
+                                <p className="md:text-lg">Apakah grup yang didapat interaktif?</p>
+                                <Plus className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
+                                Setiap peserta akan bergabung dalam grup diskusi yang interaktif, didampingi mentor dan sesama peserta. Anda dapat
+                                bertanya, berdiskusi, dan berbagi pengalaman secara langsung di grup tersebut.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="payment-method" className="rounded-lg border-2 border-zinc-400 px-4 py-2">
+                        <AccordionTrigger className="w-full text-left text-zinc-950 hover:cursor-pointer dark:text-zinc-50">
+                            <div className="flex items-center justify-between">
+                                <p className="md:text-lg">Bagaimana cara pembayarannya?</p>
+                                <Plus className="text-primary h-4 w-4 transition-transform duration-200 group-data-expanded:-rotate-180 dark:text-zinc-50" />
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <p className="text-sm text-zinc-500 md:text-base dark:text-zinc-400">
+                                Pembayaran dapat dilakukan melalui transfer bank, e-wallet, atau metode pembayaran lain yang tersedia di platform
+                                kami. Detail pembayaran akan muncul saat Anda melakukan pendaftaran kelas atau webinar.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </div>
         </section>
     );
 }

@@ -1,23 +1,12 @@
-import FakeNotifications from '@/components/fake-notifications';
-import PromotionPopup from '@/components/promotion-popup';
 import UserLayout from '@/layouts/user-layout';
 import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
 import AboutSection from './about-section';
-import CarouselSection from './carousel-section';
-import CtaSection from './cta-section';
 import FaqSection from './faq-section';
+import FeatureSection from './feature-section';
+import HeroSection from './hero-section';
 import LatestProductsSection from './latest-products-section';
-import ProgramSection from './program-section';
 import TestimonySection from './testimony-section';
-import ToolsSection from './tools-section';
-
-interface Tool {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-}
 
 interface Category {
     id: string;
@@ -50,30 +39,13 @@ interface ReferralInfo {
     hasActive: boolean;
 }
 
-interface Promotion {
-    id: string;
-    promotion_flyer: string;
-    start_date: string;
-    end_date: string;
-    url_redirect?: string;
-    is_active: boolean;
-}
-
 interface HomeProps {
-    tools: Tool[];
     latestProducts: Product[];
     myProductIds: MyProductIds;
-    allProducts: Array<{
-        id: string;
-        title: string;
-        type: 'course' | 'webinar';
-        price: number;
-    }>;
-    activePromotion?: Promotion | null;
     referralInfo: ReferralInfo;
 }
 
-export default function Home({ tools, latestProducts, myProductIds, allProducts, activePromotion, referralInfo }: HomeProps) {
+export default function Home({ latestProducts, myProductIds, referralInfo }: HomeProps) {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const refFromUrl = urlParams.get('ref');
@@ -89,18 +61,12 @@ export default function Home({ tools, latestProducts, myProductIds, allProducts,
         <UserLayout>
             <Head title="Beranda" />
 
-            {activePromotion && <PromotionPopup promotion={activePromotion} suppressDuration={3} />}
-
-            <CarouselSection />
+            <HeroSection />
             <AboutSection />
-            <ProgramSection />
-            <ToolsSection tools={tools} />
             <LatestProductsSection latestProducts={latestProducts} myProductIds={myProductIds} />
+            <FeatureSection />
             <TestimonySection />
             <FaqSection />
-            <CtaSection />
-
-            {typeof window !== 'undefined' && window.innerWidth >= 1024 && <FakeNotifications products={allProducts} />}
 
             <a
                 href="https://wa.me/+6282241477053?text=Halo%20Admin%20Arsa%20Cendekia,%20saya%20ingin%20membeli%20produk."

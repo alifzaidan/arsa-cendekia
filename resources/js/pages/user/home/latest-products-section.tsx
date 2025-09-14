@@ -1,7 +1,6 @@
-import { Spotlight } from '@/components/ui/spotlight';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
-import { Calendar, Star } from 'lucide-react';
+import { Calendar, MoveRight, Star } from 'lucide-react';
 
 interface Category {
     id: string;
@@ -35,7 +34,6 @@ interface LatestProductsProps {
 }
 
 export default function LatestProductsSection({ latestProducts, myProductIds }: LatestProductsProps) {
-    // Pastikan myProductIds memiliki struktur yang benar
     const safeMyProductIds = {
         courses: myProductIds?.courses || [],
         webinars: myProductIds?.webinars || [],
@@ -45,19 +43,28 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
         switch (type) {
             case 'course':
                 return (
-                    <span className="absolute top-2 left-2 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                    <span className="absolute top-2 right-2 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                         Kelas
                     </span>
                 );
             case 'webinar':
                 return (
-                    <span className="absolute top-2 left-2 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
+                    <span className="absolute top-2 right-2 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
                         Webinar
                     </span>
                 );
             default:
                 return null;
         }
+    };
+
+    const getCategoryBadge = (category: Category) => {
+        if (!category?.name) return null;
+        return (
+            <span className="absolute top-2 left-2 rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                {category.name}
+            </span>
+        );
     };
 
     const hasAccess = (product: Product) => {
@@ -102,19 +109,14 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
         return null;
     };
 
-    // Pastikan latestProducts adalah array sebelum filter
     const safeLatestProducts = Array.isArray(latestProducts) ? latestProducts : [];
     const availableProducts = safeLatestProducts.filter((product) => !hasAccess(product));
 
     return (
         <section className="mx-auto w-full max-w-7xl px-4 py-8">
             <div className="mx-auto text-center">
-                <p className="text-primary border-primary bg-background mx-auto mb-4 w-fit rounded-full border bg-gradient-to-t from-[#D9E5FF] to-white px-4 py-1 text-sm font-medium shadow-xs">
-                    Produk Terbaru
-                </p>
-                <h2 className="dark:text-primary-foreground mx-auto mb-8 max-w-2xl text-3xl font-bold italic md:text-4xl">
-                    Kelas & Webinar Terbaru dari Arsa Cendekia
-                </h2>
+                <p className="mx-auto mb-2 font-medium text-gray-500">Produk Kami</p>
+                <h2 className="mx-auto mb-8 max-w-2xl text-3xl font-bold md:text-4xl">Jelajahi Produk Terbaru Kami</h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {(() => {
                         if (safeLatestProducts.length === 0) {
@@ -129,8 +131,7 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
                         if (availableProducts.length === 0) {
                             return (
                                 <div className="col-span-full flex flex-col items-center justify-center gap-4 py-12">
-                                    <div className="text-center text-lg font-semibold">Anda sudah memiliki akses semua produk terbaru kami. 😁🙏</div>
-                                    <p className="text-center text-gray-500">Terima kasih telah menjadi bagian dari Arsa Cendekia!</p>
+                                    <div className="text-center text-lg font-semibold">Anda sudah memiliki akses semua produk terbaru kami.</div>
                                 </div>
                             );
                         }
@@ -139,26 +140,33 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
                             <Link
                                 key={product.id}
                                 href={getProductUrl(product)}
-                                className="relative overflow-hidden rounded-xl bg-zinc-300/30 p-[2px] dark:bg-zinc-700/30"
+                                className="relative overflow-hidden rounded-xl bg-zinc-300/30 shadow-md transition hover:shadow-lg dark:bg-zinc-700/30"
                             >
-                                <Spotlight className="bg-primary blur-2xl" size={284} />
-                                <div className="bg-sidebar relative flex h-full w-full flex-col items-center justify-between rounded-lg dark:bg-zinc-800">
-                                    <div className="w-full overflow-hidden rounded-t-lg">
+                                <div className="bg-sidebar relative flex h-full w-full flex-col items-center justify-between rounded-lg p-4 dark:bg-zinc-800">
+                                    <div className="w-full overflow-hidden rounded-lg">
                                         <div className="relative">
                                             <img
                                                 src={product.thumbnail ? `/storage/${product.thumbnail}` : '/assets/images/placeholder.png'}
                                                 alt={product.title}
-                                                className="h-48 w-full rounded-t-lg object-cover"
+                                                className="h-48 w-full rounded-lg object-cover"
                                             />
                                             {getProductBadge(product.type)}
+                                            {getCategoryBadge(product.category)}
                                         </div>
-                                        <h2 className="mx-4 mt-2 text-left text-lg font-semibold">{product.title}</h2>
-                                    </div>
-                                    <div className="w-full p-4 text-left">
+                                        <h2 className="mt-2 text-left text-lg font-bold">{product.title}</h2>
+                                        <div className="my-2 flex justify-between">
+                                            {product.type === 'course' && (
+                                                <div className="flex items-center gap-1.5">
+                                                    <Star size={16} className="text-yellow-500" fill="currentColor" />
+                                                    <span className="font-semibold text-yellow-500">5.0</span>
+                                                </div>
+                                            )}
+                                        </div>
+
                                         {product.price === 0 ? (
-                                            <p className="text-lg font-semibold text-green-600 dark:text-green-400">Gratis</p>
+                                            <p className="text-left text-lg font-semibold text-green-600 dark:text-green-400">Gratis</p>
                                         ) : (
-                                            <div className="">
+                                            <div className="text-left font-semibold">
                                                 {product.strikethrough_price > 0 && (
                                                     <p className="text-sm text-red-500 line-through">
                                                         Rp {product.strikethrough_price.toLocaleString('id-ID')}
@@ -171,47 +179,17 @@ export default function LatestProductsSection({ latestProducts, myProductIds }: 
                                         )}
 
                                         {getDateDisplay(product)}
-
-                                        <div className="mt-4 flex justify-between">
-                                            {product.type === 'course' && (
-                                                <div className="flex items-center gap-2">
-                                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                </div>
-                                            )}
-
-                                            {product.level && (
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild>
-                                                        <div
-                                                            className={
-                                                                product.level === 'beginner'
-                                                                    ? 'rounded-full border border-green-300 bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-zinc-800 dark:text-green-300'
-                                                                    : product.level === 'intermediate'
-                                                                      ? 'rounded-full border border-yellow-300 bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700 dark:bg-zinc-800 dark:text-yellow-300'
-                                                                      : 'rounded-full border border-red-300 bg-red-100 px-3 py-1 text-sm font-medium text-red-700 dark:bg-zinc-800 dark:text-red-300'
-                                                            }
-                                                        >
-                                                            <p>{product.level === 'beginner' ? '1' : product.level === 'intermediate' ? '2' : '3'}</p>
-                                                        </div>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        {product.level === 'beginner' && <p>Level Beginner</p>}
-                                                        {product.level === 'intermediate' && <p>Level Intermediate</p>}
-                                                        {product.level === 'advanced' && <p>Level Advanced</p>}
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            )}
-                                        </div>
                                     </div>
                                 </div>
                             </Link>
                         ));
                     })()}
                 </div>
+                <Button className="mt-8" variant="outline" asChild>
+                    <Link href="/course">
+                        Lihat Semua Produk <MoveRight />
+                    </Link>
+                </Button>
             </div>
         </section>
     );
