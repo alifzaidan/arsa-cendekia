@@ -106,10 +106,10 @@ export default function Home({ tools, latestProducts, myProductIds, allProducts,
                 href="https://wa.me/+6282241477053?text=Halo%20Admin%20Arsa%20Cendekia,%20saya%20ingin%20membeli%20produk."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fixed right-4 bottom-18 z-50 flex h-12 w-12 animate-bounce items-center justify-center rounded-full bg-green-100 shadow-lg transition duration-1000 hover:bg-green-200 md:right-10 md:h-16 md:w-16 lg:bottom-6"
+                className="fixed right-4 bottom-18 z-50 flex h-12 w-12 items-center justify-center transition-transform hover:scale-110 md:right-10 md:h-16 md:w-16 lg:bottom-6"
                 aria-label="Chat WhatsApp"
             >
-                <img src="/assets/images/icon-wa.svg" alt="WhatsApp" className="h-8 w-8 md:h-12 md:w-12" />
+                <img src="/assets/images/wa-icon.webp" alt="WhatsApp" className="h-8 w-8 md:h-12 md:w-12" />
             </a>
         </UserLayout>
     );

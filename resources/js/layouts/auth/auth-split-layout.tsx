@@ -19,8 +19,8 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
             <div className="w-full lg:p-8">
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <Link href={route('home')} className="relative z-20 flex items-center justify-center">
-                        <img src="/assets/images/logo-primary-2.png" alt="Arsa Cendekia" className="block w-20 fill-current dark:hidden" />
-                        <img src="/assets/images/logo-secondary-2.png" alt="Arsa Cendekia" className="hidden w-20 fill-current dark:block" />
+                        <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-20 fill-current dark:hidden" />
+                        <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-20 fill-current dark:block" />
                     </Link>
                     <div className="flex flex-col items-center gap-2 text-center">
                         <h1 className="text-2xl font-bold italic">{title}</h1>

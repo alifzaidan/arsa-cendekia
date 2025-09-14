@@ -19,7 +19,7 @@ export default function AuthCardLayout({
                         <CardHeader className="px-10 pt-4 pb-0 text-center">
                             <Link href={route('home')} className="mb-4 flex items-center gap-2 self-center font-medium">
                                 <div className="flex w-20 items-center justify-center">
-                                    <img src="/assets/images/logo-primary-2.png" alt="Logo Arsa Cendekia" className="fill-current" />
+                                    <img src="/assets/images/logo-primary.png" alt="Logo Arsa Cendekia" className="fill-current" />
                                 </div>
                             </Link>
                             <CardTitle className="text-xl">{title}</CardTitle>

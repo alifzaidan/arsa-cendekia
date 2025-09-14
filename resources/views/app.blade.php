@@ -39,15 +39,15 @@
     <title inertia>{{ config('app.name', 'Arsa Cendekia') }}</title>
 
     <meta name="description"
-        content="Arsa Cendekia adalah platform edukasi digital yang menyediakan layanan pembelajaran mulai dari kelas online, webinar, dan bootcamp.">
+        content="CV Arsa Cendekia merupakan perusahaan yang terfokus pada pelatihan dan sertifikasi di bidang perpajakan dan akuntansi. Selain itu, CV Arsa Cendekia menyediakan bimbingan belajar dan riset pendidikan untuk siswa SMA hingga mahasiswa.">
     <meta name="keywords"
-        content="Arsa Cendekia, platform edukasi, pembelajaran online, kelas online, webinar, bootcamp, pengembangan keterampilan, kursus digital">
+        content="Arsa Cendekia, pelatihan perpajakan, pelatihan akuntansi, sertifikasi perpajakan, sertifikasi akuntansi, bimbingan belajar, riset pendidikan, kursus pajak, kursus akuntansi, pelatihan profesional, pendidikan pajak, pendidikan akuntansi">
     <meta name="author" content="CV. Arsa Cendekia">
     <meta name="robots" content="index, follow">
 
     <meta property="og:title" content="Arsa Cendekia">
     <meta property="og:description"
-        content="Arsa Cendekia adalah platform edukasi digital yang menyediakan layanan pembelajaran mulai dari kelas online, webinar, dan bootcamp.">
+        content="CV Arsa Cendekia merupakan perusahaan yang terfokus pada pelatihan dan sertifikasi di bidang perpajakan dan akuntansi. Selain itu, CV Arsa Cendekia menyediakan bimbingan belajar dan riset pendidikan untuk siswa SMA hingga mahasiswa.">
     <meta property="og:image" content="{{ asset('assets/images/logo-square.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">

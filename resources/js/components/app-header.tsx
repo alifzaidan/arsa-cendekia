@@ -10,11 +10,13 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookText, Home, Menu, MonitorPlay, Search, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { SearchCommand } from './search-command';
+import { BookText, Home, Menu, MonitorPlay, Phone, User } from 'lucide-react';
 
 const mainNavItems: NavItem[] = [
+    {
+        title: 'Beranda',
+        href: '/',
+    },
     {
         title: 'Kelas Online',
         href: '/course',
@@ -22,6 +24,10 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Webinar',
         href: '/webinar',
+    },
+    {
+        title: 'Kontak',
+        href: '/contact',
     },
 ];
 
@@ -41,9 +47,14 @@ const mobileNavItems = [
         href: '/webinar',
         icon: MonitorPlay,
     },
+    {
+        title: 'Kontak',
+        href: '/contact',
+        icon: Phone,
+    },
 ];
 
-const activeItemStyles = 'text-primary bg-primary/10 dark:text-white dark:bg-primary/50';
+const activeItemStyles = 'text-primary dark:text-white';
 
 interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
@@ -53,23 +64,23 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
-    const [searchOpen, setSearchOpen] = useState(false);
+    // const [searchOpen, setSearchOpen] = useState(false);
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                setSearchOpen((open) => !open);
-            }
-        };
-        document.addEventListener('keydown', down);
-        return () => document.removeEventListener('keydown', down);
-    }, []);
+    // useEffect(() => {
+    //     const down = (e: KeyboardEvent) => {
+    //         if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+    //             e.preventDefault();
+    //             setSearchOpen((open) => !open);
+    //         }
+    //     };
+    //     document.addEventListener('keydown', down);
+    //     return () => document.removeEventListener('keydown', down);
+    // }, []);
 
     return (
         <>
-            <div className="border-sidebar-border/80 bg-background fixed top-0 right-0 left-0 z-40 border-b shadow-xs">
-                <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
+            <div className="border-sidebar-border/80 bg-background fixed top-0 right-0 left-0 z-40">
+                <div className="mx-auto flex h-16 items-center justify-between px-4 md:max-w-7xl">
                     {/* Mobile Menu : Sementara tidak digunakan karena diganti dengan dock */}
                     <div className="hidden">
                         <Sheet>
@@ -108,33 +119,36 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
 
                     <Link href="/" prefetch className="flex items-center space-x-2">
                         {/* Logo untuk light mode */}
-                        <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-32 fill-current dark:hidden" />
+                        <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-12 fill-current dark:hidden" />
                         {/* Logo untuk dark mode */}
-                        <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-32 fill-current dark:block" />
+                        <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-12 fill-current dark:block" />
+                        <div className="leading-tight">
+                            <p className="font-bold">Arsa</p>
+                            <p className="font-bold">Cendekia</p>
+                        </div>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
+                    <div className="mx-auto hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
-                                    <NavigationMenuItem key={index} className="relative flex h-full items-center">
-                                        <Link
-                                            href={item.href}
-                                            className={cn(
-                                                navigationMenuTriggerStyle(),
-                                                page.url.startsWith(item.href) && activeItemStyles,
-                                                'hover:bg-primary/5 dark:hover:bg-primary/40 h-9 cursor-pointer px-3',
+                                {mainNavItems.map((item, index) => {
+                                    const isActive = item.href === '/' ? page.url === '/' : page.url.startsWith(item.href) && item.href !== '/';
+                                    return (
+                                        <NavigationMenuItem key={index} className="relative flex h-full items-center">
+                                            <Link
+                                                href={item.href}
+                                                className={cn(navigationMenuTriggerStyle(), isActive && activeItemStyles, 'h-9 cursor-pointer px-3')}
+                                            >
+                                                {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
+                                                {item.title}
+                                            </Link>
+                                            {isActive && (
+                                                <div className="bg-primary absolute bottom-4 left-1/2 h-0.5 w-[75%] -translate-x-1/2 translate-y-px dark:bg-white"></div>
                                             )}
-                                        >
-                                            {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
-                                            {item.title}
-                                        </Link>
-                                        {page.url.startsWith(item.href) && (
-                                            <div className="bg-primary absolute bottom-0 left-0 h-0.5 w-full translate-y-px dark:bg-white"></div>
-                                        )}
-                                    </NavigationMenuItem>
-                                ))}
+                                        </NavigationMenuItem>
+                                    );
+                                })}
                                 {auth.user && (
                                     <NavigationMenuItem className="relative flex h-full items-center">
                                         <Link
@@ -153,8 +167,8 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </NavigationMenu>
                     </div>
 
-                    <div className="ml-auto flex items-center space-x-2">
-                        <div className="relative flex items-center space-x-1">
+                    <div className="flex items-center space-x-2">
+                        {/* <div className="relative flex items-center space-x-1">
                             <Button variant="outline" onClick={() => setSearchOpen(true)}>
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                                 <p className="mr-4 hidden lg:block">Cari Produk...</p>
@@ -168,7 +182,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     </kbd>
                                 </div>
                             </Button>
-                        </div>
+                        </div> */}
                         {auth.user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -187,7 +201,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             </DropdownMenu>
                         ) : (
                             <>
-                                <Button variant="outline" asChild>
+                                <Button variant="secondary" asChild>
                                     <Link href={route('login')}>Masuk</Link>
                                 </Button>
                                 <Button variant="default" asChild className="hidden lg:inline-flex">
@@ -241,7 +255,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                 </div>
             </div>
 
-            <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />
+            {/* <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} /> */}
 
             {breadcrumbs.length > 1 && (
                 <div className="border-sidebar-border/70 flex w-full border-b">

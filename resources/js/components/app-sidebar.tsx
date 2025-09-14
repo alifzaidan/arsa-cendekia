@@ -3,7 +3,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Banknote, BookText, Dock, DollarSign, LayoutGrid, List, MonitorPlay, SquareMousePointer, User, UserCheck, Users } from 'lucide-react';
+import { Banknote, BookText, Dock, DollarSign, LayoutGrid, List, MonitorPlay, SquareMousePointer, User, UserCheck } from 'lucide-react';
 
 const allNavItems: (NavItem & { roles: string[] })[] = [
     {
@@ -24,12 +24,12 @@ const allNavItems: (NavItem & { roles: string[] })[] = [
         icon: UserCheck,
         roles: ['admin'],
     },
-    {
-        title: 'Mentor',
-        href: '/admin/mentors',
-        icon: Users,
-        roles: ['admin'],
-    },
+    // {
+    //     title: 'Mentor',
+    //     href: '/admin/mentors',
+    //     icon: Users,
+    //     roles: ['admin'],
+    // },
     {
         title: 'Kategori',
         href: '/admin/categories',
@@ -100,9 +100,9 @@ export function AppSidebar() {
                         <SidebarMenuButton size="lg" asChild>
                             <Link href="/admin/dashboard" prefetch>
                                 {/* Logo untuk light mode */}
-                                <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-32 fill-current dark:hidden" />
+                                <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-12 fill-current dark:hidden" />
                                 {/* Logo untuk dark mode */}
-                                <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-32 fill-current dark:block" />
+                                <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-12 fill-current dark:block" />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

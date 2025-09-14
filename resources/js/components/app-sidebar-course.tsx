@@ -140,7 +140,7 @@ export function AppSidebarCourse({
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" asChild>
                                 <Link href="/admin/dashboard" prefetch>
-                                    <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-32 fill-current dark:hidden" />
+                                    <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-12 fill-current dark:hidden" />
                                     {/* Logo untuk dark mode */}
                                     <img
                                         src="/assets/images/logo-secondary.png"

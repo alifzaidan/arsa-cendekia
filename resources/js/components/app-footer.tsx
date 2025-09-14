@@ -34,9 +34,9 @@ export default function AppFooter() {
             <div className="mx-auto grid max-w-7xl gap-8 px-4 text-sm sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
                 <div>
                     {/* Logo untuk light mode */}
-                    <img src="/assets/images/logo-primary-2.png" alt="Logo Arsa Cendekia" className="block w-24 fill-current dark:hidden" />
+                    <img src="/assets/images/logo-primary.png" alt="Logo Arsa Cendekia" className="block w-24 fill-current dark:hidden" />
                     {/* Logo untuk dark mode */}
-                    <img src="/assets/images/logo-secondary-2.png" alt="Logo Arsa Cendekia" className="hidden w-24 fill-current dark:block" />
+                    <img src="/assets/images/logo-secondary.png" alt="Logo Arsa Cendekia" className="hidden w-24 fill-current dark:block" />
                     <p className="my-4">Maju Bersama Arsa Cendekia</p>
                     <h5 className="font-semibold">CV. Arsa Cendekia</h5>
                     <p className="text-gray-800 dark:text-gray-400">
