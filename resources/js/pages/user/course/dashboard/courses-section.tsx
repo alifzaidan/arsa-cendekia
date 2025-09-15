@@ -10,8 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Magnetic } from '@/components/ui/magnetic';
-import { Spotlight } from '@/components/ui/spotlight';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Link } from '@inertiajs/react';
 import { GalleryVerticalEnd, Star } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -81,12 +79,10 @@ export default function CoursesSection({ categories, courses, myCourseIds }: Cou
     const visibleCourses = filteredCourses.slice(0, visibleCount);
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4" id="course">
-            <h2 className="dark:text-primary-foreground mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-gray-900 italic md:text-4xl">
-                Ratusan Skill Impian Kini Dalam Genggamanmu
-            </h2>
+        <section className="mx-auto w-full max-w-7xl px-4 py-20" id="course">
+            <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-gray-900 md:text-4xl">Kelas Terbaik Kami</h2>
             <p className="mx-auto mb-8 text-center text-gray-600 dark:text-gray-400">
-                Eksplorasi materi-materi unggulan dari rancangan experts yang akan selalu update setiap bulan.
+                Jelajahi berbagai materi kelas berupa video lerning dan try out yang dapat Anda akses lifetime.
             </p>
             <div className="mb-4 flex justify-between gap-2">
                 <Input type="search" placeholder="Cari kelas..." value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -119,7 +115,7 @@ export default function CoursesSection({ categories, courses, myCourseIds }: Cou
                     <button
                         type="button"
                         onClick={() => setSelectedCategory(null)}
-                        className={`rounded-xl border px-4 py-2 text-sm transition hover:cursor-pointer ${
+                        className={`rounded-full border px-4 py-2 text-sm transition hover:cursor-pointer ${
                             selectedCategory === null
                                 ? 'to-primary text-primary-foreground border-primary bg-gradient-to-br from-black'
                                 : 'hover:bg-accent dark:hover:bg-primary/10 bg-background border-gray-300 text-gray-800 dark:border-zinc-100/20 dark:bg-zinc-800 dark:text-zinc-100'
@@ -132,7 +128,7 @@ export default function CoursesSection({ categories, courses, myCourseIds }: Cou
                             key={category.id}
                             type="button"
                             onClick={() => setSelectedCategory(category.id)}
-                            className={`rounded-xl border px-4 py-2 text-sm transition hover:cursor-pointer ${
+                            className={`rounded-full border px-4 py-2 text-sm transition hover:cursor-pointer ${
                                 selectedCategory === category.id
                                     ? 'to-primary text-primary-foreground border-primary bg-gradient-to-br from-black'
                                     : 'hover:bg-accent dark:hover:bg-primary/10 bg-background border-gray-300 text-gray-800 dark:border-zinc-100/20 dark:bg-zinc-800 dark:text-zinc-100'
@@ -157,29 +153,34 @@ export default function CoursesSection({ categories, courses, myCourseIds }: Cou
                             <Link
                                 key={course.id}
                                 href={hasAccess ? `profile/my-courses/${course.slug}` : `/course/${course.slug}`}
-                                className="relative overflow-hidden rounded-xl bg-zinc-300/30 p-[2px] dark:bg-zinc-700/30"
+                                className="relative overflow-hidden rounded-xl bg-zinc-300/30 shadow-md transition hover:shadow-lg dark:bg-zinc-700/30"
                             >
-                                <Spotlight className="bg-primary blur-2xl" size={284} />
-                                <div
-                                    className={`relative flex h-full w-full flex-col items-center justify-between rounded-lg transition-colors ${
-                                        hasAccess ? 'bg-zinc-100 dark:bg-zinc-900' : 'bg-sidebar dark:bg-zinc-800'
-                                    }`}
-                                >
-                                    <div className="w-full overflow-hidden rounded-t-lg">
-                                        <img
-                                            src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
-                                            alt={course.title}
-                                            className="h-48 w-full rounded-t-lg object-cover"
-                                        />
-                                        <h2 className="mx-4 mt-2 text-lg font-semibold">{course.title}</h2>
-                                    </div>
-                                    <div className="w-full p-4 text-left">
+                                <div className="bg-sidebar relative flex h-full w-full flex-col items-center justify-between rounded-lg p-4 dark:bg-zinc-800">
+                                    <div className="w-full overflow-hidden rounded-lg">
+                                        <div className="relative">
+                                            <img
+                                                src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
+                                                alt={course.title}
+                                                className="h-48 w-full rounded-lg object-cover"
+                                            />
+                                            <span className="absolute top-2 left-2 rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                                                {course.category.name}
+                                            </span>
+                                        </div>
+                                        <h2 className="mt-2 text-left text-lg font-bold">{course.title}</h2>
+                                        <div className="my-2 flex justify-between">
+                                            <div className="flex items-center gap-1.5">
+                                                <Star size={16} className="text-yellow-500" fill="currentColor" />
+                                                <span className="font-semibold text-yellow-500">5.0</span>
+                                            </div>
+                                        </div>
+
                                         {hasAccess ? (
-                                            <p className="text-primary text-sm font-medium">Anda sudah memiliki akses</p>
+                                            <p className="text-primary text-left text-lg font-semibold">Anda sudah memiliki akses</p>
                                         ) : course.price === 0 ? (
-                                            <p className="text-lg font-semibold text-green-600 dark:text-green-400">Gratis</p>
+                                            <p className="text-left text-lg font-semibold text-green-600 dark:text-green-400">Gratis</p>
                                         ) : (
-                                            <div className="">
+                                            <div className="text-left font-semibold">
                                                 {course.strikethrough_price > 0 && (
                                                     <p className="text-sm text-red-500 line-through">
                                                         Rp {course.strikethrough_price.toLocaleString('id-ID')}
@@ -190,35 +191,6 @@ export default function CoursesSection({ categories, courses, myCourseIds }: Cou
                                                 </p>
                                             </div>
                                         )}
-                                        <div className="mt-4 flex justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                                <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                            </div>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <div
-                                                        className={
-                                                            course.level === 'beginner'
-                                                                ? 'rounded-full border border-green-300 bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-zinc-800 dark:text-green-300'
-                                                                : course.level === 'intermediate'
-                                                                  ? 'rounded-full border border-yellow-300 bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700 dark:bg-zinc-800 dark:text-yellow-300'
-                                                                  : 'rounded-full border border-red-300 bg-red-100 px-3 py-1 text-sm font-medium text-red-700 dark:bg-zinc-800 dark:text-red-300'
-                                                        }
-                                                    >
-                                                        <p>{course.level === 'beginner' ? '1' : course.level === 'intermediate' ? '2' : '3'}</p>
-                                                    </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    {course.level === 'beginner' && <p>Level Beginner</p>}
-                                                    {course.level === 'intermediate' && <p>Level Intermediate</p>}
-                                                    {course.level === 'advanced' && <p>Level Advanced</p>}
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </div>
                                     </div>
                                 </div>
                             </Link>
