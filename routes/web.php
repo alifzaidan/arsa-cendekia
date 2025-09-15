@@ -21,6 +21,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuizSubmissionController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\WebinarController as UserWebinarController;
 use App\Http\Controllers\User\HomeController;
@@ -34,6 +35,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/terms-and-conditions', [LegalController::class, 'termsAndConditions'])->name('terms-and-conditions');
 Route::get('/privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy');
 Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
