@@ -77,12 +77,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     return (
-        <AuthLayout title="Masuk ke Arsa Cendekia" description="Silahkan masukkan informasi akun kamu.">
-            <Head title="Masuk" />
+        <AuthLayout title="Login" description="Masuk ke akun Anda untuk melanjutkan">
+            <Head title="Login" />
 
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 {/* Tampilkan referral info jika ada */}
-                {referralCode && referralCode !== 'ATM2025' && (
+                {referralCode && referralCode !== 'ARS2025' && (
                     <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
                         <div className="flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-blue-500"></div>

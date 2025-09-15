@@ -32,7 +32,7 @@ export default function Register({ affiliate_code }: { affiliate_code?: string }
             return storedReferral;
         }
 
-        return 'ATM2025';
+        return 'ARS2025';
     };
 
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
@@ -70,8 +70,8 @@ export default function Register({ affiliate_code }: { affiliate_code?: string }
     };
 
     return (
-        <AuthLayout title="Buat Akun Arsa Cendekia" description="Silahkan isi form untuk mendaftar.">
-            <Head title="Daftar" />
+        <AuthLayout title="Register" description="Buat akun baru untuk memulai">
+            <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">

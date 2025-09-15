@@ -113,7 +113,7 @@ class HomeController extends Controller
             'myProductIds' => $myProductIds,
             'referralInfo' => [
                 'code' => session('referral_code'),
-                'hasActive' => session('referral_code') && session('referral_code') !== 'ATM2025',
+                'hasActive' => session('referral_code') && session('referral_code') !== 'ARS2025',
             ],
         ]);
     }

@@ -57,11 +57,11 @@ class SocialiteController extends Controller
             $user->avatar = $user->avatar ?? $socialiteUser->getAvatar();
             $user->save();
         } else {
-            $referralCode = session('referral_code', 'ATM2025');
+            $referralCode = session('referral_code', 'ARS2025');
             $referrer = User::where('affiliate_code', $referralCode)->first();
 
             if (!$referrer) {
-                $referrer = User::where('affiliate_code', 'ATM2025')->first();
+                $referrer = User::where('affiliate_code', 'ARS2025')->first();
             }
 
             $user = User::create([
