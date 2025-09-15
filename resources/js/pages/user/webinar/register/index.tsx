@@ -3,7 +3,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserLayout from '@/layouts/user-layout';
 import { SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -42,13 +41,6 @@ interface ReferralInfo {
     hasActive: boolean;
 }
 
-function parseList(items?: string | null): string[] {
-    if (!items) return [];
-    const matches = items.match(/<li>(.*?)<\/li>/g);
-    if (!matches) return [];
-    return matches.map((li) => li.replace(/<\/?li>/g, '').trim());
-}
-
 export default function RegisterWebinar({
     webinar,
     hasAccess,
@@ -78,7 +70,6 @@ export default function RegisterWebinar({
         tiktok_follow_proof: null as File | null,
     });
 
-    const benefitList = parseList(webinar.benefits);
     const isFree = webinar.price === 0;
 
     const transactionFee = 5000;
@@ -256,12 +247,17 @@ export default function RegisterWebinar({
             <UserLayout>
                 <Head title="Login Required" />
 
-                <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
-                    <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                        <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
+                <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
+                    <div className="mx-auto my-18 w-full max-w-7xl px-4">
+                        <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">
                             Daftar Webinar "{webinar.title}"
                         </h2>
-                        <p className="text-center text-gray-400">Silakan login terlebih dahulu untuk mendaftar webinar.</p>
+                        <img
+                            src={webinar.thumbnail ? `/storage/${webinar.thumbnail}` : '/assets/images/placeholder.png'}
+                            alt={webinar.title}
+                            className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                        />
+                        <p className="text-center text-gray-200">Silakan login terlebih dahulu untuk mendaftar webinar.</p>
                     </div>
                 </section>
                 <section className="mx-auto my-4 w-full max-w-7xl px-4">
@@ -290,12 +286,17 @@ export default function RegisterWebinar({
         return (
             <UserLayout>
                 <Head title="Daftar Webinar" />
-                <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
-                    <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                        <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
+                <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
+                    <div className="mx-auto my-18 w-full max-w-7xl px-4">
+                        <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">
                             Daftar Webinar "{webinar.title}"
                         </h2>
-                        <p className="text-center text-gray-400">Silakan lengkapi profil Anda terlebih dahulu.</p>
+                        <img
+                            src={webinar.thumbnail ? `/storage/${webinar.thumbnail}` : '/assets/images/placeholder.png'}
+                            alt={webinar.title}
+                            className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                        />
+                        <p className="text-center text-gray-200">Silakan lengkapi profil Anda terlebih dahulu.</p>
                     </div>
                 </section>
                 <section className="mx-auto my-4 w-full max-w-7xl px-4">
@@ -317,12 +318,15 @@ export default function RegisterWebinar({
     return (
         <UserLayout>
             <Head title="Daftar Webinar" />
-            <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
-                <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                    <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
-                        Daftar Webinar "{webinar.title}"
-                    </h2>
-                    <p className="text-center text-gray-400">
+            <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
+                <div className="mx-auto my-18 w-full max-w-7xl px-4">
+                    <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">Daftar Webinar "{webinar.title}"</h2>
+                    <img
+                        src={webinar.thumbnail ? `/storage/${webinar.thumbnail}` : '/assets/images/placeholder.png'}
+                        alt={webinar.title}
+                        className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                    />
+                    <p className="text-center text-gray-200">
                         {isFree
                             ? 'Silahkan lengkapi persyaratan berikut untuk mendaftar webinar.'
                             : 'Silakan selesaikan pembayaran untuk mendaftar webinar.'}
@@ -330,27 +334,7 @@ export default function RegisterWebinar({
                 </div>
             </section>
             <section className="mx-auto my-4 w-full max-w-7xl px-4">
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
-                    <Tabs defaultValue="detail" className="lg:col-span-2">
-                        <TabsList>
-                            <TabsTrigger value="detail">Detail Webinar</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="detail">
-                            <div className="h-full rounded-lg border p-4">
-                                <h2 className="text-3xl font-bold italic">Yang akan kamu dapatkan</h2>
-                                <p className="mt-2 mb-4 text-sm text-gray-600">Manfaat yang akan kamu peroleh setelah mengikuti webinar ini.</p>
-                                <ul className="space-y-2">
-                                    {benefitList.map((benefit, idx) => (
-                                        <li key={idx} className="flex items-center gap-2">
-                                            <BadgeCheck size={18} className="mt-1 min-w-6 text-green-600" />
-                                            <p>{benefit}</p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </TabsContent>
-                    </Tabs>
-
+                <div className="w-full">
                     {hasAccess ? (
                         <div className="flex h-full flex-col items-center justify-center space-y-4 rounded-lg border p-6 text-center">
                             <BadgeCheck size={64} className="text-green-500" />
@@ -375,7 +359,7 @@ export default function RegisterWebinar({
                         </div>
                     ) : !showFreeForm ? (
                         <form onSubmit={handleCheckout}>
-                            <h2 className="my-2 text-xl font-bold italic">Detail {isFree ? 'Pendaftaran' : 'Pembayaran'}</h2>
+                            <h2 className="my-2 text-xl font-bold">Detail {isFree ? 'Pendaftaran' : 'Pembayaran'}</h2>
                             <div className="space-y-4 rounded-lg border p-4">
                                 {isFree ? (
                                     <div className="space-y-2 text-center">
@@ -528,7 +512,7 @@ export default function RegisterWebinar({
                         </form>
                     ) : (
                         <form onSubmit={handleFreeCheckout}>
-                            <h2 className="my-2 text-xl font-bold italic">Upload Bukti Follow</h2>
+                            <h2 className="my-2 text-xl font-bold">Upload Bukti Follow</h2>
                             <div className="space-y-4 rounded-lg border p-4">
                                 <div>
                                     <Label>Bukti Follow Instagram</Label>

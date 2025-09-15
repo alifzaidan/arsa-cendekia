@@ -3,7 +3,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserLayout from '@/layouts/user-layout';
 import { SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -262,12 +261,17 @@ export default function CheckoutCourse({
             <UserLayout>
                 <Head title="Login Required" />
 
-                <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
+                <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
                     <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                        <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
+                        <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">
                             Daftar Kelas Online "{course.title}"
                         </h2>
-                        <p className="text-center text-gray-400">Silakan login terlebih dahulu untuk mendaftar kelas online.</p>
+                        <img
+                            src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
+                            alt={course.title}
+                            className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                        />
+                        <p className="text-center text-gray-200">Silakan login terlebih dahulu untuk mendaftar kelas online.</p>
                     </div>
                 </section>
                 <section className="mx-auto my-4 w-full max-w-7xl px-4">
@@ -296,12 +300,17 @@ export default function CheckoutCourse({
         return (
             <UserLayout>
                 <Head title="Checkout Kelas" />
-                <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
+                <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
                     <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                        <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
+                        <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">
                             Checkout Kelas "{course.title}"
                         </h2>
-                        <p className="text-center text-gray-400">Silakan lengkapi profil Anda terlebih dahulu.</p>
+                        <img
+                            src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
+                            alt={course.title}
+                            className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                        />
+                        <p className="text-center text-gray-200">Silakan lengkapi profil Anda terlebih dahulu.</p>
                     </div>
                 </section>
                 <section className="mx-auto my-4 w-full max-w-7xl px-4">
@@ -323,66 +332,21 @@ export default function CheckoutCourse({
     return (
         <UserLayout>
             <Head title="Checkout Kelas" />
-            <section className="to-primary w-full bg-gradient-to-tl from-black px-4">
+            <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
                 <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                    <h2 className="mx-auto mb-4 max-w-3xl bg-gradient-to-r from-[#71D0F7] via-white to-[#E6834A] bg-clip-text text-center text-3xl font-bold text-transparent italic sm:text-4xl">
-                        Checkout Kelas "{course.title}"
-                    </h2>
-                    <p className="text-center text-gray-400">
+                    <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">Checkout Kelas "{course.title}"</h2>
+                    <img
+                        src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
+                        alt={course.title}
+                        className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
+                    />
+                    <p className="text-center text-gray-200">
                         {isFree ? 'Lanjutkan untuk mendapatkan akses gratis ke kelas ini.' : 'Silakan selesaikan pembayaran untuk mendaftar kelas.'}
                     </p>
                 </div>
             </section>
             <section className="mx-auto my-4 w-full max-w-7xl px-4">
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
-                    <Tabs defaultValue="detail" className="lg:col-span-2">
-                        <TabsList>
-                            <TabsTrigger value="detail">Detail Kelas</TabsTrigger>
-                            <TabsTrigger value="preview">Preview Video</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="detail">
-                            <div className="h-full rounded-lg border p-4">
-                                <h2 className="text-3xl font-bold italic">Yang akan kamu pelajari</h2>
-                                <p className="mt-2 mb-4 text-sm text-gray-600">
-                                    Berikut adalah beberapa poin penting yang akan kamu pelajari dalam kelas "{course.title}".
-                                </p>
-                                <ul className="space-y-2">
-                                    {keyPointList.map((keyPoint, idx) => (
-                                        <li key={idx} className="flex items-center gap-2">
-                                            <BadgeCheck size={18} className="mt-1 min-w-6 text-green-600" />
-                                            <p className="text-sm md:text-base">{keyPoint}</p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="preview">
-                            <div className="h-full rounded-lg border p-4">
-                                <h2 className="text-3xl font-bold italic">Preview Video</h2>
-                                <p className="mt-2 mb-4 text-sm text-gray-600">
-                                    Berikut adalah preview video dari kelas "{course.title}". Silakan tonton untuk mendapatkan gambaran materi yang
-                                    akan dipelajari.
-                                </p>
-                                <div className="aspect-video w-full">
-                                    <iframe
-                                        width="100%"
-                                        height="100%"
-                                        src={
-                                            firstVideoLesson?.video_url &&
-                                            (firstVideoLesson.video_url.includes('youtube.com') || firstVideoLesson.video_url.includes('youtu.be'))
-                                                ? `https://www.youtube.com/embed/${getYoutubeId(firstVideoLesson.video_url)}`
-                                                : ''
-                                        }
-                                        title="YouTube video player"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                        className="h-full w-full rounded-xl"
-                                    ></iframe>
-                                </div>
-                            </div>
-                        </TabsContent>
-                    </Tabs>
-
+                <div className="w-full">
                     {hasAccess ? (
                         <div className="flex h-full flex-col items-center justify-center space-y-4 rounded-lg border p-6 text-center">
                             <BadgeCheck size={64} className="text-green-500" />
@@ -405,7 +369,7 @@ export default function CheckoutCourse({
                         </div>
                     ) : (
                         <form onSubmit={handleCheckout}>
-                            <h2 className="my-2 text-xl font-bold italic">Detail {isFree ? 'Pendaftaran' : 'Pembayaran'}</h2>
+                            <h2 className="my-2 text-xl font-bold">Detail {isFree ? 'Pendaftaran' : 'Pembayaran'}</h2>
                             <div className="space-y-4 rounded-lg border p-4">
                                 {isFree ? (
                                     <div className="flex items-center justify-between p-4 text-center">
