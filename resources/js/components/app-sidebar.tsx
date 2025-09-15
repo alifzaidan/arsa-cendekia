@@ -93,16 +93,32 @@ export function AppSidebar() {
     const mainNavItems = allNavItems.filter((item) => item.roles.includes(role));
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/admin/dashboard" prefetch>
-                                {/* Logo untuk light mode */}
-                                <img src="/assets/images/logo-primary.png" alt="Arsa Cendekia" className="block w-12 fill-current dark:hidden" />
-                                {/* Logo untuk dark mode */}
-                                <img src="/assets/images/logo-secondary.png" alt="Arsa Cendekia" className="hidden w-12 fill-current dark:block" />
+                            <Link
+                                href="/admin/dashboard"
+                                prefetch
+                                className="flex items-center gap-3"
+                            >
+                                <div className="relative">
+                                    <img
+                                        src="/assets/images/logo-primary.png"
+                                        alt="Arsa Cendekia"
+                                        className="block w-12 dark:hidden"
+                                    />
+                                    <img
+                                        src="/assets/images/logo-secondary.png"
+                                        alt="Arsa Cendekia"
+                                        className="hidden w-12 dark:block"
+                                    />
+                                </div>
+                                <span className="font-semibold leading-tight text-sm">
+                                    Arsa
+                                    <span className="block">Cendekia</span>
+                                </span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

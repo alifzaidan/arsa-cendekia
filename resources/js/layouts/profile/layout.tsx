@@ -47,10 +47,10 @@ export default function ProfileLayout({ children }: PropsWithChildren) {
     const currentPath = window.location.pathname;
 
     return (
-        <div className="px-4 py-6">
-            <div className="mx-auto w-full max-w-7xl sm:px-4">
-                <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-8">
-                    <aside className="w-full rounded-xl border p-2 lg:w-52 lg:max-w-xl">
+        <div className="px-4 py-6 ">
+            <div className="mx-auto w-full max-w-7xl sm:px-4 ">
+                <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-8 ">
+                    <aside className="w-full rounded-xl border p-2 lg:w-52 lg:max-w-xl relative overflow-hidden border-r bg-gradient-to-b from-indigo-50 via-white to-sky-50 dark:from-indigo-950/40 dark:via-background dark:to-sky-900/30">
                         <div className="mb-4 p-2 text-center">
                             <Avatar className="mx-auto mb-2 size-16 overflow-hidden rounded-full">
                                 <AvatarImage src={auth.user.avatar} alt={auth.user.name} />

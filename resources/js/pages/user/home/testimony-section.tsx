@@ -41,7 +41,7 @@ export default function TestimonySection() {
                 </p>
             </div>
             <div className="mt-8">
-                <InfiniteSlider gap={24} speed={0.5} className="w-full">
+                <InfiniteSlider gap={24} speed={30} className="w-full">
                     {testimonies.map((item, idx) => (
                         <div
                             key={idx}

@@ -82,44 +82,38 @@ export default function Profile({ stats, recentProducts }: ProfileProps) {
         <UserLayout>
             <Head title="Profil" />
             <ProfileLayout>
-                <Heading title="Dashboard" description="Pantau aktivitas dan progres belajar Anda di sini." />
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Produk</CardTitle>
-                            <GraduationCap className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
-                            <p className="text-muted-foreground text-xs">Total item yang Anda ikuti</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Kelas Online</CardTitle>
-                            <BookTextIcon className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stats.courses}</div>
-                            <p className="text-muted-foreground text-xs">Kelas yang telah Anda beli</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Webinar</CardTitle>
-                            <MonitorPlay className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stats.webinars}</div>
-                            <p className="text-muted-foreground text-xs">Webinar yang Anda ikuti</p>
-                        </CardContent>
-                    </Card>
+                <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-6 dark:from-indigo-950/40 dark:via-background dark:to-sky-900/10">
+                    <div className="pointer-events-none absolute inset-0">
+                        <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-indigo-400/10 blur-2xl dark:bg-indigo-500/10" />
+                        <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-sky-400/10 blur-2xl dark:bg-sky-500/10" />
+                    </div>
+                    <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <h1 className="text-2xl font-semibold tracking-tight">Dashboard Belajar</h1>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Pantau progres dan aktivitas pembelajaran Anda.
+                            </p>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                            <div className="flex items-center gap-2 rounded-lg border bg-white/60 px-4 py-2 text-sm shadow-sm backdrop-blur dark:bg-white/5">
+                                <GraduationCap className="h-4 w-4 text-primary" />
+                                <span className="font-medium">{stats.total} Total</span>
+                            </div>
+                            <div className="flex items-center gap-2 rounded-lg border bg-white/60 px-4 py-2 text-sm shadow-sm backdrop-blur dark:bg-white/5">
+                                <BookTextIcon className="h-4 w-4 text-indigo-500" />
+                                <span>{stats.courses} Kelas</span>
+                            </div>
+                            <div className="flex items-center gap-2 rounded-lg border bg-white/60 px-4 py-2 text-sm shadow-sm backdrop-blur dark:bg-white/5">
+                                <MonitorPlay className="h-4 w-4 text-emerald-500" />
+                                <span>{stats.webinars} Webinar</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-6">
                     <Heading title="Produk Saya" description="Daftar produk yang telah Anda beli dan ikuti." />
-                    <Card className="p-4">
+                    <Card className="relative overflow-hidden border bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-4 dark:from-indigo-950/40 dark:via-background dark:to-sky-900/10">
                         <Table>
                             <TableHeader>
                                 <TableRow>
