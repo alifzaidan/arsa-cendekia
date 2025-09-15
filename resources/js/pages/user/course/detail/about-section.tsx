@@ -1,4 +1,5 @@
-import { BadgeCheck, Star, User } from 'lucide-react';
+import { CircleCheck } from 'lucide-react';
+import ModulesSection from './modules-section';
 
 interface Course {
     title: string;
@@ -6,6 +7,17 @@ interface Course {
     key_points?: string | null;
     user?: { name: string; bio: string | null };
     images?: { image_url: string }[];
+    tools?: { name: string; description?: string | null; icon: string | null }[];
+    modules?: {
+        title: string;
+        description?: string | null;
+        lessons?: {
+            title: string;
+            description?: string | null;
+            type: 'text' | 'video' | 'file' | 'quiz';
+            is_free?: boolean;
+        }[];
+    }[];
 }
 
 function parseList(items?: string | null): string[] {
@@ -19,70 +31,38 @@ export default function AboutSection({ course }: { course: Course }) {
     const keyPoints = parseList(course.key_points);
 
     return (
-        <>
-            <section className="mx-auto w-full max-w-5xl px-4" id="about">
-                <h2 className="dark:text-primary-foreground mb-4 text-center text-3xl font-bold text-gray-900 italic md:text-5xl">
-                    Kembangkan Skillmu
-                </h2>
-                <p className="text-center text-gray-600 dark:text-gray-400">{course.description}</p>
-            </section>
-            {course.images!.length > 0 && (
-                <section className="mx-auto mt-4 w-full max-w-5xl px-4">
-                    <p className="text-primary border-primary bg-background mb-4 w-fit rounded-full border bg-gradient-to-t from-[#D9E5FF] to-white px-4 py-1 text-sm font-medium shadow-xs">
-                        Highlight Kelas
-                    </p>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {course.images?.map((image, index) => (
-                            <img
-                                key={index}
-                                src={image.image_url ? `/storage/${image.image_url}` : '/assets/images/placeholder.png'}
-                                alt={course.title}
-                                className="aspect-video rounded-lg border border-gray-200 object-cover shadow-md"
-                            />
+        <section className="mx-auto mt-8 grid w-full max-w-7xl grid-cols-1 gap-8 px-4 lg:grid-cols-2">
+            <ModulesSection course={course} />
+            <div className="order-first lg:order-last">
+                <div>
+                    <h3 className="text-lg font-semibold">Tentang Kelas</h3>
+                    <p className="text-primary mt-2">{course.description}</p>
+                </div>
+
+                <div className="mt-6">
+                    <h3 className="text-lg font-semibold">Poin Utama</h3>
+                    <ul className="mt-2 flex flex-col gap-2">
+                        {keyPoints.map((req, idx) => (
+                            <li key={idx} className="flex items-center gap-2">
+                                <CircleCheck className="text-primary mt-1 h-5 min-w-5" />
+                                <p>{req}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="mt-6">
+                    <h3 className="text-lg font-semibold">Tools</h3>
+                    <div className="mt-2 flex flex-col gap-2">
+                        {course.tools?.map((tool) => (
+                            <div key={tool.name} className="flex w-full items-center gap-2">
+                                <img src={tool.icon ? `/storage/${tool.icon}` : '/assets/images/placeholder.png'} alt={tool.name} className="w-12" />
+                                <h3 className="text-lg font-semibold">{tool.name}</h3>
+                            </div>
                         ))}
                     </div>
-                </section>
-            )}
-            <section className="mx-auto mt-4 w-full max-w-5xl px-4">
-                <p className="text-primary border-primary bg-background mb-4 w-fit rounded-full border bg-gradient-to-t from-[#D9E5FF] to-white px-4 py-1 text-sm font-medium shadow-xs">
-                    Poin Utama
-                </p>
-                <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {keyPoints.map((req, idx) => (
-                        <li key={idx} className="flex items-center gap-2">
-                            <BadgeCheck className="mt-1 min-w-12 text-green-600" />
-                            <p>{req}</p>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-            <section className="mx-auto mt-4 w-full max-w-5xl px-4">
-                <p className="text-primary border-primary bg-background mb-4 w-fit rounded-full border bg-gradient-to-t from-[#D9E5FF] to-white px-4 py-1 text-sm font-medium shadow-xs">
-                    Belajar dengan Ahlinya
-                </p>
-                <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-zinc-700 dark:bg-zinc-800">
-                    <div className="flex w-full items-center gap-4">
-                        <div className="rounded-full bg-gray-200 p-2">
-                            <User className="h-10 w-10 text-gray-500" />
-                        </div>
-                        <div className="w-full">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{course.user?.name}</h3>
-                            </div>
-                            <p className="mb-2 text-sm text-gray-600 dark:text-gray-400">{course.user?.bio}</p>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                    <Star size={18} className="text-yellow-500" fill="currentColor" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 }

@@ -1,24 +1,50 @@
-export default function AboutSection() {
+import { CircleCheck } from 'lucide-react';
+
+interface Webinar {
+    description?: string | null;
+    tools?: { name: string; description?: string | null; icon: string | null }[];
+    benefits?: string | null;
+}
+
+function parseList(items?: string | null): string[] {
+    if (!items) return [];
+    const matches = items.match(/<li>(.*?)<\/li>/g);
+    if (!matches) return [];
+    return matches.map((li) => li.replace(/<\/?li>/g, '').trim());
+}
+
+export default function AboutSection({ webinar }: { webinar: Webinar }) {
+    const benefitList = parseList(webinar.benefits);
+
     return (
-        <section className="mx-auto w-full max-w-7xl px-4">
-            <div className="grid grid-cols-1 gap-8 rounded-lg border border-gray-200 bg-white p-6 md:grid-cols-3 dark:border-zinc-700 dark:bg-zinc-800">
-                <div className="flex flex-col items-center justify-center gap-2">
-                    <h3 className="text-3xl font-bold italic">Pembicara Ahli</h3>
-                    <p className="text-muted-foreground text-center text-sm">
-                        Belajar langsung dari para ahli dan praktisi berpengalaman di bidangnya untuk mendapatkan wawasan mendalam.
-                    </p>
+        <section className="mx-auto mt-8 grid w-full max-w-5xl grid-cols-1 gap-8 px-4 lg:grid-cols-2">
+            <div>
+                <h3 className="text-lg font-semibold">Tools</h3>
+                <div className="mt-2 flex flex-col gap-2">
+                    {webinar.tools?.map((tool) => (
+                        <div key={tool.name} className="flex w-full items-center gap-2">
+                            <img src={tool.icon ? `/storage/${tool.icon}` : '/assets/images/placeholder.png'} alt={tool.name} className="w-16" />
+                            <h3 className="text-xl font-semibold">{tool.name}</h3>
+                        </div>
+                    ))}
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2">
-                    <h3 className="text-3xl font-bold italic">Sesi Interaktif</h3>
-                    <p className="text-muted-foreground text-center text-sm">
-                        Manfaatkan sesi tanya jawab langsung untuk berdiskusi, mengklarifikasi keraguan, dan memperluas pemahaman Anda.
-                    </p>
+            </div>
+            <div className="order-first lg:order-last">
+                <div>
+                    <h3 className="text-lg font-semibold">Tentang Kelas</h3>
+                    <p className="text-primary mt-2">{webinar.description}</p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2">
-                    <h3 className="text-3xl font-bold italic">Wawasan Terkini</h3>
-                    <p className="text-muted-foreground text-center text-sm">
-                        Dapatkan pemahaman mendalam tentang tren dan teknologi terbaru yang relevan dengan perkembangan karir Anda.
-                    </p>
+
+                <div className="mt-6">
+                    <h3 className="text-lg font-semibold">Poin Utama</h3>
+                    <ul className="mt-2 flex flex-col gap-2">
+                        {benefitList.map((req, idx) => (
+                            <li key={idx} className="flex items-center gap-2">
+                                <CircleCheck className="text-primary mt-1 h-5 min-w-5" />
+                                <p>{req}</p>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </section>

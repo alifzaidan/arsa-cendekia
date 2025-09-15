@@ -2,12 +2,9 @@ import UserLayout from '@/layouts/user-layout';
 import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
 import AboutSection from './about-section';
-import BenefitsSection from './benefits-section';
 import HeroSection from './hero-section';
 import MentorSection from './mentor-section';
 import RegisterSection from './register-section';
-import RelatedProduct from './related-product';
-import ToolsSection from './tools-section';
 
 interface Webinar {
     id: string;
@@ -54,8 +51,8 @@ interface ReferralInfo {
 
 export default function Webinar({
     webinar,
-    relatedWebinars,
-    myWebinarIds,
+    // relatedWebinars,
+    // myWebinarIds,
     referralInfo,
 }: {
     webinar: Webinar;
@@ -79,12 +76,10 @@ export default function Webinar({
             <Head title={`${webinar.title} - Webinar`} />
 
             <HeroSection webinar={webinar} />
-            <AboutSection />
-            <BenefitsSection webinar={webinar} />
-            <ToolsSection webinar={webinar} />
             <MentorSection webinar={webinar} />
+            <AboutSection webinar={webinar} />
             <RegisterSection webinar={webinar} />
-            <RelatedProduct relatedWebinars={relatedWebinars} myWebinarIds={myWebinarIds} />
+            {/* <RelatedProduct relatedWebinars={relatedWebinars} myWebinarIds={myWebinarIds} /> */}
         </UserLayout>
     );
 }
