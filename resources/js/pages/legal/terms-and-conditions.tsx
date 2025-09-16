@@ -11,15 +11,16 @@ export default function TermsAndConditions() {
                     <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800">
                         <div className="mb-8 text-center">
                             <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">Syarat dan Ketentuan</h1>
-                            <p className="text-gray-600 dark:text-gray-400">Terakhir diperbarui: 12 Juli 2025</p>
+                            <p className="text-gray-600 dark:text-gray-400">Terakhir diperbarui: 16 September 2025</p>
                         </div>
 
                         <div className="prose prose-gray dark:prose-invert max-w-none">
                             <section className="mb-8">
                                 <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">1. Pendahuluan</h2>
                                 <p className="mb-4 text-gray-700 dark:text-gray-300">
-                                    Selamat datang di Arsa Cendekia. Syarat dan ketentuan ini mengatur penggunaan layanan pembelajaran online yang
-                                    disediakan oleh CV. Arsa Cendekia.
+                                    Selamat datang di Arsa Cendekia. CV. Arsa Cendekia berdiri sejak tahun 2024 sebagai perusahaan yang terfokus pada
+                                    pelatihan dan sertifikasi di bidang perpajakan dan akuntansi, serta menyediakan bimbingan belajar dan riset
+                                    pendidikan untuk siswa SMA hingga mahasiswa.
                                 </p>
                                 <p className="text-gray-700 dark:text-gray-300">
                                     Dengan mengakses dan menggunakan platform Arsa Cendekia, Anda menyetujui untuk terikat dengan syarat dan ketentuan
@@ -37,13 +38,27 @@ export default function TermsAndConditions() {
                                         <strong>Pengguna:</strong> Setiap individu yang mengakses atau menggunakan platform kami
                                     </li>
                                     <li>
-                                        <strong>Kelas Online:</strong> Kursus pembelajaran digital yang tersedia di platform
+                                        <strong>Kelas Online:</strong> Kursus pembelajaran digital dalam bidang perpajakan, akuntansi, dan mata
+                                        pelajaran akademik
                                     </li>
                                     <li>
                                         <strong>Webinar:</strong> Seminar online interaktif dengan waktu terjadwal
                                     </li>
                                     <li>
-                                        <strong>Konten:</strong> Semua materi pembelajaran termasuk video, teks, dan file pendukung
+                                        <strong>Tryout:</strong> Simulasi ujian online untuk persiapan ujian nasional dan Tes Kemampuan Akademik (TKA)
+                                    </li>
+                                    <li>
+                                        <strong>Pelatihan Coretax:</strong> Program sertifikasi perpajakan yang mencakup berbagai jenis Ter (A, B, dan
+                                        C)
+                                    </li>
+                                    <li>
+                                        <strong>Zahir Accounting:</strong> Program pelatihan software akuntansi dengan tingkat Basic dan Intermediate
+                                    </li>
+                                    <li>
+                                        <strong>Bimbingan Skripsi:</strong> Layanan konsultasi dan bimbingan untuk penyelesaian tugas akhir mahasiswa
+                                    </li>
+                                    <li>
+                                        <strong>Konten:</strong> Semua materi pembelajaran termasuk video, teks, soal tryout, dan file pendukung
                                     </li>
                                 </ul>
                             </section>
@@ -69,19 +84,35 @@ export default function TermsAndConditions() {
                                 <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">4. Layanan Kami</h2>
                                 <div className="space-y-4 text-gray-700 dark:text-gray-300">
                                     <div>
-                                        <h3 className="mb-2 font-semibold">4.1 Kelas Online</h3>
+                                        <h3 className="mb-2 font-semibold">4.1 Pelatihan Perpajakan dan Akuntansi</h3>
                                         <ul className="ml-4 list-inside list-disc space-y-1">
+                                            <li>Pelatihan Coretax dengan studi kasus berbagai jenis Ter (A, B, dan C)</li>
+                                            <li>Sertifikasi Zahir Accounting Basic dan Intermediate</li>
+                                            <li>Webinar perpajakan dan akuntansi terkini</li>
                                             <li>Akses seumur hidup untuk kelas yang telah dibeli</li>
-                                            <li>Materi dapat diakses kapan saja setelah pembelian</li>
-                                            <li>Update materi secara berkala tanpa biaya tambahan</li>
+                                            <li>Update materi sesuai perubahan regulasi</li>
                                         </ul>
                                     </div>
                                     <div>
-                                        <h3 className="mb-2 font-semibold">4.2 Webinar</h3>
+                                        <h3 className="mb-2 font-semibold">4.2 Bimbingan Akademik</h3>
                                         <ul className="ml-4 list-inside list-disc space-y-1">
-                                            <li>Sesi langsung dengan jadwal yang telah ditentukan</li>
-                                            <li>Akses rekaman webinar setelah acara selesai</li>
-                                            <li>Kesempatan tanya jawab dengan pembicara</li>
+                                            <li>
+                                                Bimbingan belajar siswa SMA/SMK untuk mata pelajaran Bahasa Indonesia, Matematika, dan Bahasa Inggris
+                                            </li>
+                                            <li>Bank soal dan latihan persiapan ujian nasional</li>
+                                            <li>Tryout dan simulasi Tes Kemampuan Akademik (TKA)</li>
+                                            <li>Bimbingan online skripsi untuk mahasiswa</li>
+                                            <li>Konsultasi riset dan metodologi penelitian</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h3 className="mb-2 font-semibold">4.3 Platform Pembelajaran</h3>
+                                        <ul className="ml-4 list-inside list-disc space-y-1">
+                                            <li>Kelas online dengan video pembelajaran berkualitas</li>
+                                            <li>Webinar interaktif dengan pembicara ahli</li>
+                                            <li>Tryout online dengan sistem penilaian otomatis</li>
+                                            <li>Forum diskusi dan tanya jawab</li>
+                                            <li>Sertifikat digital untuk program yang telah diselesaikan</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -96,14 +127,16 @@ export default function TermsAndConditions() {
                                             <li>Semua pembayaran dilakukan dalam mata uang Rupiah (IDR)</li>
                                             <li>Pembayaran dapat dilakukan melalui berbagai metode yang tersedia</li>
                                             <li>Akses ke layanan diberikan setelah pembayaran dikonfirmasi</li>
+                                            <li>Biaya sertifikasi termasuk dalam paket pelatihan</li>
                                         </ul>
                                     </div>
                                     <div>
                                         <h3 className="mb-2 font-semibold">5.2 Kebijakan Pengembalian Dana</h3>
                                         <ul className="ml-4 list-inside list-disc space-y-1">
                                             <li>Pengembalian dana dapat dilakukan dalam 7 hari setelah pembelian</li>
-                                            <li>Syarat: belum mengakses lebih dari 20% materi kelas</li>
+                                            <li>Syarat: belum mengakses lebih dari 20% materi kelas atau belum mengikuti tryout</li>
                                             <li>Untuk webinar: pengembalian dana 100% jika dibatalkan sebelum acara dimulai</li>
+                                            <li>Untuk bimbingan skripsi: pengembalian dana sesuai progress konsultasi yang telah dilakukan</li>
                                             <li>Proses pengembalian dana akan diproses dalam 7-14 hari kerja</li>
                                         </ul>
                                     </div>
@@ -115,17 +148,19 @@ export default function TermsAndConditions() {
                                 <div className="space-y-3 text-gray-700 dark:text-gray-300">
                                     <p>Semua konten yang tersedia di platform ini, termasuk namun tidak terbatas pada:</p>
                                     <ul className="ml-4 list-inside list-disc space-y-1">
-                                        <li>Video pembelajaran</li>
-                                        <li>Materi tertulis</li>
-                                        <li>Slide presentasi</li>
-                                        <li>Kode program</li>
-                                        <li>Logo dan merek dagang</li>
+                                        <li>Video pembelajaran perpajakan dan akuntansi</li>
+                                        <li>Materi pelatihan Coretax dan Zahir Accounting</li>
+                                        <li>Bank soal dan tryout TKA</li>
+                                        <li>Slide presentasi webinar</li>
+                                        <li>Template dan panduan bimbingan skripsi</li>
+                                        <li>Logo dan merek dagang Arsa Cendekia</li>
                                     </ul>
                                     <p>Adalah milik Arsa Cendekia atau pembuat konten yang berlisensi kepada kami. Pengguna dilarang untuk:</p>
                                     <ul className="ml-4 list-inside list-disc space-y-1">
-                                        <li>Mendistribusikan konten tanpa izin</li>
-                                        <li>Menggunakan konten untuk keperluan komersial</li>
-                                        <li>Memodifikasi atau mengubah konten</li>
+                                        <li>Mendistribusikan konten pembelajaran tanpa izin</li>
+                                        <li>Menyalin atau membagikan soal tryout</li>
+                                        <li>Menggunakan materi untuk keperluan komersial</li>
+                                        <li>Memodifikasi atau mengubah konten sertifikasi</li>
                                         <li>Membagikan akses akun kepada pihak lain</li>
                                     </ul>
                                 </div>
@@ -205,7 +240,7 @@ export default function TermsAndConditions() {
                                         <p>Email: arsacendekia@gmail.com</p>
                                         <p>WhatsApp: +6282241477053</p>
                                         <p>
-                                            Alamat: Karangploso, Kabupaten Malang Prov. Jawa Timur
+                                            Alamat: Perumahan Bumi Bandara Blok C7, No.6 Kec. Singosari, Kab. Malang
                                             <br />
                                             Prov. Jawa Timur
                                         </p>

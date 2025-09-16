@@ -313,7 +313,7 @@ class InvoiceController extends Controller
 
             $this->addToCertificateParticipants($type, $item->id, $userId);
 
-            $this->sendWhatsAppFreeEnrollment($invoice, $type, $item);
+            // $this->sendWhatsAppFreeEnrollment($invoice, $type, $item);
 
             DB::commit();
 
@@ -502,12 +502,12 @@ class InvoiceController extends Controller
             $this->addEnrollmentToCertificateParticipants($invoice);
 
             // Kirim WhatsApp setelah pembayaran berhasil
-            $this->sendWhatsAppNotification($invoice);
+            // $this->sendWhatsAppNotification($invoice);
         } else {
             $invoice->update(['status' => 'failed']);
 
             // Kirim WhatsApp untuk pembayaran gagal (opsional)
-            $this->sendWhatsAppPaymentFailed($invoice);
+            // $this->sendWhatsAppPaymentFailed($invoice);
         }
 
         return response()->json(['message' => 'Success'], 200);
@@ -916,7 +916,7 @@ class InvoiceController extends Controller
             'invoice' => $invoice,
             'company' => [
                 'name' => 'Arsa Cendekia',
-                'address' => 'Karangploso, Kabupaten Malang Prov. Jawa Timur',
+                'address' => 'Perumahan Bumi Bandara Blok C7, No.6 Kec. Singosari, Kab. Malang',
                 'phone' => '+6282241477053',
                 'email' => 'arsacendekia@gmail.com',
                 'website' => 'www.arsacendekia.id'

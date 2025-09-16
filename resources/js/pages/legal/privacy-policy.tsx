@@ -11,16 +11,17 @@ export default function PrivacyPolicy() {
                     <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800">
                         <div className="mb-8 text-center">
                             <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">Kebijakan Privasi</h1>
-                            <p className="text-gray-600 dark:text-gray-400">Terakhir diperbarui: 12 Juli 2025</p>
+                            <p className="text-gray-600 dark:text-gray-400">Terakhir diperbarui: 16 September 2025</p>
                         </div>
 
                         <div className="prose prose-gray dark:prose-invert max-w-none">
                             <section className="mb-8">
                                 <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">1. Pendahuluan</h2>
                                 <p className="mb-4 text-gray-700 dark:text-gray-300">
-                                    CV. Arsa Cendekia menghargai privasi Anda dan berkomitmen untuk melindungi informasi pribadi yang Anda berikan
-                                    kepada kami saat menggunakan platform pembelajaran online kami ("Layanan"). Kebijakan Privasi ini menjelaskan
-                                    bagaimana kami mengumpulkan, menggunakan, mengungkapkan, dan melindungi informasi pribadi Anda.
+                                    CV. Arsa Cendekia berdiri sejak tahun 2024 sebagai perusahaan yang terfokus pada pelatihan dan sertifikasi di
+                                    bidang perpajakan dan akuntansi, serta menyediakan bimbingan belajar dan riset pendidikan untuk siswa SMA hingga
+                                    mahasiswa. Kami menghargai privasi Anda dan berkomitmen untuk melindungi informasi pribadi yang Anda berikan saat
+                                    menggunakan platform pembelajaran online kami.
                                 </p>
                                 <p className="text-gray-700 dark:text-gray-300">
                                     Dengan menggunakan layanan Arsa Cendekia, Anda menyetujui praktik yang dijelaskan dalam Kebijakan Privasi ini.
@@ -76,16 +77,18 @@ export default function PrivacyPolicy() {
                                 <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">3. Tujuan Penggunaan Informasi</h2>
                                 <p className="mb-3 text-gray-700 dark:text-gray-300">Kami menggunakan informasi pribadi Anda untuk:</p>
                                 <ul className="ml-4 list-inside list-disc space-y-2 text-gray-700 dark:text-gray-300">
-                                    <li>Menyediakan dan mengelola layanan pembelajaran</li>
+                                    <li>Menyediakan dan mengelola layanan pelatihan perpajakan dan akuntansi</li>
+                                    <li>Memberikan bimbingan belajar untuk siswa SMA/SMK dan mahasiswa</li>
+                                    <li>Menyediakan akses ke kelas online, webinar, dan tryout</li>
+                                    <li>Melaksanakan sertifikasi Coretax dan Zahir Accounting</li>
                                     <li>Memproses pendaftaran dan pembayaran</li>
-                                    <li>Memberikan dukungan pelanggan</li>
-                                    <li>Mengirimkan komunikasi terkait layanan</li>
+                                    <li>Memberikan dukungan pelanggan dan bimbingan akademis</li>
+                                    <li>Mengirimkan komunikasi terkait layanan pembelajaran</li>
                                     <li>Mempersonalisasi pengalaman belajar</li>
-                                    <li>Menganalisis dan meningkatkan layanan kami</li>
+                                    <li>Menganalisis progres pembelajaran dan hasil tryout</li>
                                     <li>Mencegah penipuan dan aktivitas yang merugikan</li>
-                                    <li>Mematuhi kewajiban hukum</li>
+                                    <li>Mematuhi kewajiban hukum dan regulasi pendidikan</li>
                                     <li>Mengirimkan materi pemasaran (dengan persetujuan Anda)</li>
-                                    <li>Melakukan riset dan analisis untuk pengembangan produk</li>
                                 </ul>
                             </section>
 
@@ -301,7 +304,7 @@ export default function PrivacyPolicy() {
                                         <p>Email: arsacendekia@gmail.com</p>
                                         <p>WhatsApp: +6282241477053</p>
                                         <p>
-                                            Alamat: Karangploso, Kabupaten Malang Prov. Jawa Timur
+                                            Alamat: Perumahan Bumi Bandara Blok C7, No.6 Kec. Singosari, Kab. Malang
                                             <br />
                                             Prov. Jawa Timur
                                         </p>

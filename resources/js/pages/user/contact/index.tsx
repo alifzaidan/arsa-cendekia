@@ -35,9 +35,9 @@ export default function Contact() {
                                         <div>
                                             <h3 className="font-semibold text-gray-900 dark:text-white">Alamat Kantor</h3>
                                             <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                Jl. Merdeka No. 123
+                                                Perumahan Bumi Bandara Blok C7, No.6
                                                 <br />
-                                                Jakarta Pusat, DKI Jakarta
+                                                Kec. Singosari, Kab. Malang
                                                 <br />
                                                 Indonesia 10110
                                             </p>
@@ -82,9 +82,7 @@ export default function Contact() {
                                             <p className="text-sm text-gray-600 dark:text-gray-400">
                                                 Senin - Jumat: 08:00 - 17:00
                                                 <br />
-                                                Sabtu: 08:00 - 14:00
-                                                <br />
-                                                Minggu: Tutup
+                                                Sabtu & Minggu: Tutup
                                             </p>
                                         </div>
                                     </CardContent>
@@ -100,7 +98,7 @@ export default function Contact() {
 
                             <div className="aspect-[4/3] overflow-hidden rounded-lg">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5390917b759%3A0x6b45e67356080477!2sMonas%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1635838978683!5m2!1sen!2sid"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3383.751558976585!2d112.68889814699988!3d-7.915499675725882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd62b002ece0c6d%3A0x2d6a49bb617334ff!2sPerumahan%20Bumi%20Bandara!5e0!3m2!1sid!2sid!4v1758022107664!5m2!1sid!2sid"
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
