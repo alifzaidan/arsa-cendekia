@@ -18,7 +18,7 @@
         }
 
         body {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             width: 297mm;
             height: 210mm;
             position: relative;
@@ -33,13 +33,13 @@
             width: 100%;
             position: relative;
             padding: 14mm;
-            margin-left: 66mm;
+            margin-left: 60mm;
         }
 
         .certificate-content {
             width: 100%;
             max-width: 260mm;
-            padding: 20px;
+            padding: 100px 0px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -51,30 +51,26 @@
         }
 
         .header-top {
-            font-size: 38px;
-            color: #6b7280;
+            font-size: 48px;
             text-transform: uppercase;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         .header-bottom {
-            font-size: 38px;
-            color: #6b7280;
-            margin-bottom: 52px;
+            font-size: 48px;
+            margin-bottom: 100px;
         }
 
         .certificate-title {
-            font-size: 130px;
+            font-size: 100px;
             font-weight: bold;
-            color: #1e40af;
+            color: #B0822C;
             text-transform: uppercase;
         }
 
         .certificate-subtitle {
-            font-size: 72px;
-            color: #1e40af;
-            font-weight: 600;
-            margin-bottom: 46px;
+            font-size: 48px;
+            margin-bottom: 80px;
         }
 
         .content {
@@ -86,41 +82,39 @@
         }
 
         .content-text {
-            font-size: 38px;
-            color: #1e40af;
+            font-size: 64px;
             margin-top: 32px;
             margin-bottom: 24px;
         }
 
         .participant-name {
-            font-size: 100px;
+            font-size: 125px;
             font-weight: bold;
-            color: #1e40af;
-            margin: 52px 0;
+            margin: 0 0 100px 0;
             display: inline-block;
             min-width: 250px;
         }
 
         .program-name {
-            color: #1e40af;
+            color: #B0822C;
             font-style: italic;
             display: block;
             margin-top: 24px;
-            font-size: 38px;
+            font-size: 48px;
         }
 
         .program-description {
-            font-size: 38px;
-            font-weight: 600;
+            font-size: 48px;
+            font-weight: bold;
         }
 
         .description {
-            font-size: 38px;
-            max-width: 920px;
+            font-size: 48px;
+            max-width: 1720px;
         }
 
         .period {
-            font-size: 38px;
+            font-size: 48px;
             color: #9ca3af;
             margin-top: 24px;
             font-style: italic;
@@ -128,7 +122,7 @@
 
         .footer {
             position: relative;
-            margin-top: 150px;
+            margin-top: 180px;
             height: 120px;
             clear: both;
         }
@@ -171,18 +165,18 @@
             border: 2px dashed #d1d5db;
             border-radius: 8px;
             background: #f9fafb;
-            font-size: 10px;
+            font-size: 24px;
             display: block;
         }
 
         .certificate-url {
-            font-size: 32px;
+            font-size: 38px;
             color: #6b7280;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         .certificate-period {
-            font-size: 32px;
+            font-size: 38px;
             margin-bottom: 2px;
         }
 
@@ -201,7 +195,6 @@
 
         .signature-name {
             font-size: 46px;
-            color: #1e40af;
             font-weight: bold;
             margin-bottom: 2px;
             text-decoration: underline;
@@ -209,7 +202,7 @@
 
         .signature-title,
         .signature-date {
-            font-size: 38px;
+            font-size: 48px;
         }
 
         /* Clearfix untuk footer */
@@ -239,35 +232,21 @@
                 @endif
 
                 @if($certificate->header_bottom)
-                <div class="header-bottom">{{ $certificate->header_bottom }}</div>
+                <div class="header-bottom">NOMOR IZIN KEMENKUMHAM {{ $certificate->header_bottom }}</div>
                 @endif
 
-                <div class="certificate-title">Sertifikat</div>
+                <div class="certificate-title">CERTIFICATE OF ACHIEVEMENT</div>
                 <div class="certificate-subtitle">
-                    @if($certificate->webinar_id)
-                    Partisipasi
-                    @else
-                    Kompetensi Kelulusan
-                    @endif
+                    {{ sprintf('%04d', $data['certificate_number']) }}/{{ $certificate->certificate_number }}
                 </div>
             </div>
 
             {{-- Content --}}
             <div class="content">
-                <div class="content-text">
-                    {{ sprintf('%04d', $data['certificate_number']) }}/{{ $certificate->certificate_number }}
-                </div>
+                <div class="content-text">This certificate is proudly presented to</div>
 
                 <div class="participant-name">
                     {{ $data['participant_name'] }}
-                </div>
-
-                <div class="program-description">
-                    @if($certificate->webinar_id)
-                    TELAH BERPARTISIPASI PADA
-                    @else
-                    TELAH MENGIKUTI DAN DINYATAKAN LULUS
-                    @endif
                 </div>
 
                 @if($certificate->description)
@@ -280,7 +259,7 @@
             {{-- Footer --}}
             <div class="footer">
                 <div class="signature-container">
-                    <div class="signature-date">{{
+                    <div class="signature-date">Malang, {{
                         \Carbon\Carbon::parse($certificate->issued_date)->locale('id')->translatedFormat('d F Y') }}
                     </div>
                     <div class="signature-space">

@@ -73,7 +73,7 @@ class CertificateController extends Controller
                 $prefilledData['program_type'] = 'course';
                 $prefilledData['course_id'] = $courseId;
                 $prefilledData['title'] = "Sertifikat {$course->title}";
-                $prefilledData['description'] = "Sertifikat {$course->title} yang diselenggarakan oleh CV. Arsa Cendekia";
+                $prefilledData['description'] = "Sebagai Peserta yang Mengikuti {$course->title} yang Diselenggarakan Oleh Lulustarget.Idn";
 
                 if (!$courses->contains('id', $courseId)) {
                     $courses->push((object)[
@@ -92,7 +92,7 @@ class CertificateController extends Controller
                 $prefilledData['program_type'] = 'webinar';
                 $prefilledData['webinar_id'] = $webinarId;
                 $prefilledData['title'] = "Sertifikat {$webinar->title}";
-                $prefilledData['description'] = "Sertifikat {$webinar->title} yang diselenggarakan oleh CV. Arsa Cendekia";
+                $prefilledData['description'] = "Sebagai Peserta yang Mengikuti {$webinar->title} yang Diselenggarakan Oleh Lulustarget.Idn";
 
                 if (!$webinars->contains('id', $webinarId)) {
                     $webinars->push((object)[

@@ -90,8 +90,8 @@ export default function CreateCertificate({ designs, signs, courses, webinars, p
             certificate_number: '',
             title: prefilledData.title || '',
             description: prefilledData.description || '',
-            header_top: 'No: AHU-0001401-AH.01.14 Tahun 2025',
-            header_bottom: 'Alamat Permata Permadani Residence, Junrejo, Kota Batu, Jawa Timur',
+            header_top: 'CV ARSA CENDEKIA',
+            header_bottom: 'No: AHU-0071686-AH.0114 Tahun 2025',
             issued_date: getTodayDate(),
             period: generatePeriod(),
             program_type: prefilledData.program_type as 'course' | 'webinar' | undefined,
@@ -189,7 +189,7 @@ export default function CreateCertificate({ designs, signs, courses, webinars, p
                                             Nomor Sertifikat <span className="text-red-500">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Contoh: TO12-ARS/VII/2025" {...field} autoComplete="off" />
+                                            <Input placeholder="Contoh: LT-TOACB1/2025" {...field} autoComplete="off" />
                                         </FormControl>
                                         <FormDescription>Nomor unik untuk sertifikat ini</FormDescription>
                                         <FormMessage />

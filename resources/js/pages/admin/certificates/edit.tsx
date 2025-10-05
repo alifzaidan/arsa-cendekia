@@ -171,7 +171,7 @@ export default function EditCertificate({
                                             Nomor Sertifikat <span className="text-red-500">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Contoh: CERT-2025-001" {...field} autoComplete="off" />
+                                            <Input placeholder="Contoh: LT-TOACB1/2025" {...field} autoComplete="off" />
                                         </FormControl>
                                         <FormDescription>Nomor unik untuk sertifikat ini</FormDescription>
                                         <FormMessage />
