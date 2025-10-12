@@ -21,7 +21,7 @@ export default function HeroSection() {
 
                     <div className="flex flex-wrap gap-4">
                         <Button asChild>
-                            <Link href="/courses">
+                            <Link href="/course">
                                 Jelajahi Kelas <MoveRight />
                             </Link>
                         </Button>
