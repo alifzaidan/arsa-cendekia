@@ -113,10 +113,6 @@ class InvoiceController extends Controller
                 throw new \Exception('Harga nett tidak sesuai');
             }
 
-            if ($discountAmount > 0 && $discountAmount != $item->strikethrough_price) {
-                throw new \Exception('Discount amount tidak sesuai');
-            }
-
             if ($totalAmount != $expectedTotal) {
                 throw new \Exception('Total amount tidak sesuai');
             }
