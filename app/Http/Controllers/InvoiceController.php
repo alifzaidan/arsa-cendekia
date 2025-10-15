@@ -912,10 +912,10 @@ class InvoiceController extends Controller
             'invoice' => $invoice,
             'company' => [
                 'name' => 'Arsa Cendekia',
-                'address' => 'Perumahan Bumi Bandara Blok C7, No.6 Kec. Singosari, Kab. Malang',
+                'address' => 'Perumahan Bumi Bandara Blok C7, No.6 Kec. Singosari, Kab. Malang',
                 'phone' => '+6282241477053',
                 'email' => 'arsacendekia@gmail.com',
-                'website' => 'www.arsacendekia.id'
+                'website' => 'www.arsacendekia.com'
             ]
         ];
 

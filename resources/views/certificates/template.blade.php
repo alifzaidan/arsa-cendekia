@@ -303,7 +303,7 @@
                         @if($certificateUrl)
                         <div class="certificate-url">{{ $certificateUrl }}</div>
                         @else
-                        <div class="certificate-url">https://arsacendekia.id/certificate/{{ $data['certificate_code'] }}
+                        <div class="certificate-url">https://arsacendekia.com/certificate/{{ $data['certificate_code'] }}
                         </div>
                         @endif
                     </div>
