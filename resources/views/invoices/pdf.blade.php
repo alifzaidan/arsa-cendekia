@@ -259,23 +259,6 @@
             @php $subtotal += $item->price; @endphp
             @endforeach
 
-            @foreach($invoice->bootcampItems as $item)
-            <tr>
-                <td class="text-center">{{ $itemNumber++ }}</td>
-                <td>
-                    <span class="badge" style="background-color: #fd7e14; color: white;">Bootcamp</span>
-                </td>
-                <td>
-                    <strong>{{ $item->bootcamp->title }}</strong>
-                    @if($item->bootcamp->description)
-                    <br><small style="color: #666;">{{ Str::limit($item->bootcamp->description, 100) }}</small>
-                    @endif
-                </td>
-                <td class="text-right">Rp {{ number_format($item->price, 0, ',', '.') }}</td>
-            </tr>
-            @php $subtotal += $item->price; @endphp
-            @endforeach
-
             @foreach($invoice->webinarItems as $item)
             <tr>
                 <td class="text-center">{{ $itemNumber++ }}</td>
