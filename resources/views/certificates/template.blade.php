@@ -182,14 +182,14 @@
 
         .signature-space {
             width: 150px;
-            height: 250px;
+            height: 200px;
             margin-bottom: 8px;
             position: relative;
         }
 
         .signature-image {
-            max-width: 500px;
-            max-height: 500px;
+            max-width: 700px;
+            max-height: 700px;
             object-fit: contain;
         }
 
@@ -303,7 +303,8 @@
                         @if($certificateUrl)
                         <div class="certificate-url">{{ $certificateUrl }}</div>
                         @else
-                        <div class="certificate-url">https://arsacendekia.com/certificate/{{ $data['certificate_code'] }}
+                        <div class="certificate-url">https://arsacendekia.com/certificate/{{ $data['certificate_code']
+                            }}
                         </div>
                         @endif
                     </div>
