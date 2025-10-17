@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import UserLayout from '@/layouts/user-layout';
 import { SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { BadgeCheck, Check, Hourglass, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -52,19 +52,6 @@ interface ReferralInfo {
     hasActive: boolean;
 }
 
-function getYoutubeId(url: string) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : '';
-}
-
-function parseList(items?: string | null): string[] {
-    if (!items) return [];
-    const matches = items.match(/<li>(.*?)<\/li>/g);
-    if (!matches) return [];
-    return matches.map((li) => li.replace(/<\/?li>/g, '').trim());
-}
-
 export default function CheckoutCourse({
     course,
     hasAccess,
@@ -80,7 +67,6 @@ export default function CheckoutCourse({
     const isLoggedIn = !!auth.user;
     const isProfileComplete = isLoggedIn && auth.user?.phone_number;
 
-    const firstVideoLesson = course.modules?.flatMap((module) => module.lessons || []).find((lesson) => lesson.type === 'video' && lesson.video_url);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [promoCode, setPromoCode] = useState('');
@@ -88,7 +74,6 @@ export default function CheckoutCourse({
     const [promoLoading, setPromoLoading] = useState(false);
     const [promoError, setPromoError] = useState('');
 
-    const keyPointList = parseList(course.key_points);
     const isFree = course.price === 0;
 
     const transactionFee = 5000;
@@ -161,6 +146,55 @@ export default function CheckoutCourse({
         }
     };
 
+    const refreshCSRFToken = async (): Promise<string> => {
+        try {
+            const response = await fetch('/csrf-token', {
+                method: 'GET',
+                credentials: 'same-origin',
+            });
+            const data = await response.json();
+
+            const metaTag = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+            if (metaTag) {
+                metaTag.content = data.token;
+            }
+
+            return data.token;
+        } catch (error) {
+            console.error('Failed to refresh CSRF token:', error);
+            throw error;
+        }
+    };
+
+    const handleFreeCheckout = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!isProfileComplete) {
+            alert('Profil Anda belum lengkap! Harap lengkapi nomor telepon terlebih dahulu.');
+            window.location.href = route('profile.edit');
+            return;
+        }
+
+        setLoading(true);
+
+        router.post(
+            route('enroll.free'),
+            {
+                type: 'course',
+                id: course.id,
+            },
+            {
+                onError: (errors) => {
+                    console.log('Free enrollment errors:', errors);
+                    alert(errors.message || 'Gagal mendaftar kelas gratis.');
+                },
+                onFinish: () => {
+                    setLoading(false);
+                },
+            },
+        );
+    };
+
     const handleCheckout = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -174,40 +208,14 @@ export default function CheckoutCourse({
             alert('Anda harus menyetujui syarat dan ketentuan!');
             return;
         }
+
         setLoading(true);
 
         if (isFree) {
-            try {
-                const res = await fetch(route('enroll.free'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
-                    },
-                    body: JSON.stringify({
-                        type: 'course',
-                        id: course.id,
-                        discount_amount: course.strikethrough_price || 0,
-                        nett_amount: course.price,
-                        transaction_fee: 0,
-                        total_amount: 0,
-                    }),
-                });
-                const data = await res.json();
-                if (res.ok && data.redirect_url) {
-                    window.location.href = data.redirect_url;
-                } else {
-                    alert(data.message || 'Gagal mendaftar kelas gratis.');
-                }
-            } catch {
-                alert('Terjadi kesalahan saat proses pendaftaran.');
-            } finally {
-                setLoading(false);
-            }
-            return;
+            return handleFreeCheckout(e);
         }
 
-        try {
+        const submitPayment = async (retryCount = 0): Promise<void> => {
             const originalDiscountAmount = course.strikethrough_price > 0 ? course.strikethrough_price - course.price : 0;
             const promoDiscountAmount = discountData?.discount_amount || 0;
 
@@ -220,35 +228,53 @@ export default function CheckoutCourse({
                 total_amount: totalPrice,
             };
 
-            // Add discount code data if applied
             if (discountData?.valid) {
                 invoiceData.discount_code_id = discountData.discount_code.id;
                 invoiceData.discount_code_amount = discountData.discount_amount;
             }
 
-            console.log('Sending invoice data:', invoiceData);
+            try {
+                const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
 
-            const res = await fetch(route('invoice.store'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify(invoiceData),
-            });
+                const res = await fetch(route('invoice.store'), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                        Accept: 'application/json',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(invoiceData),
+                });
 
-            const data = await res.json();
+                // Handle 419 error with retry
+                if (res.status === 419 && retryCount < 2) {
+                    console.log(`CSRF token expired, refreshing... (attempt ${retryCount + 1})`);
+                    await refreshCSRFToken();
+                    return submitPayment(retryCount + 1);
+                }
 
-            if (res.ok && data.url) {
-                window.location.href = data.url;
-            } else {
-                alert(data.message || 'Gagal membuat invoice.');
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    if (data.payment_url) {
+                        window.location.href = data.payment_url;
+                    } else {
+                        throw new Error('Payment URL not received');
+                    }
+                } else {
+                    throw new Error(data.message || 'Gagal membuat invoice.');
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                throw error;
             }
-        } catch (error) {
-            console.error('Checkout error:', error);
-            alert('Terjadi kesalahan saat proses pembayaran.');
-        } finally {
+        };
+
+        try {
+            await submitPayment();
+        } catch (error: any) {
+            alert(error.message || 'Terjadi kesalahan saat proses pembayaran.');
             setLoading(false);
         }
     };
