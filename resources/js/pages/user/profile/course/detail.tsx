@@ -257,7 +257,7 @@ export default function DetailMyCourse({
                 </div>
             ) : (
                 <>
-                    <section className="to-background from-background via-tertiary dark:via-background dark:to-background relative bg-gradient-to-b py-12 text-gray-900 dark:text-white">
+                    <section className="relative py-12 text-gray-900 dark:text-white">
                         <div className="pointer-events-none absolute top-1/2 left-1/2 z-0 flex -translate-x-1/2 -translate-y-1/2 animate-spin items-center gap-8 duration-[10s]">
                             <div className="bg-primary h-[300px] w-[300px] rounded-full blur-[200px]" />
                             <div className="bg-secondary h-[300px] w-[300px] rounded-full blur-[200px]" />

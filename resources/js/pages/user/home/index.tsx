@@ -72,10 +72,10 @@ export default function Home({ latestProducts, myProductIds, referralInfo }: Hom
                 href="https://wa.me/+6282241477053?text=Halo%20Admin%20Arsa%20Cendekia,%20saya%20ingin%20membeli%20produk."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fixed right-4 bottom-18 z-50 flex h-12 w-12 items-center justify-center transition-transform hover:scale-110 md:right-10 md:h-16 md:w-16 lg:bottom-6"
+                className="fixed right-4 bottom-24 z-50 flex h-12 w-12 items-center justify-center transition-transform hover:scale-110 md:right-10 md:h-16 md:w-16 lg:bottom-6"
                 aria-label="Chat WhatsApp"
             >
-                <img src="/assets/images/wa-icon.webp" alt="WhatsApp" className="h-8 w-8 md:h-12 md:w-12" />
+                <img src="/assets/images/wa-icon.webp" alt="WhatsApp" className="h-10 w-10 md:h-12 md:w-12" />
             </a>
         </UserLayout>
     );
