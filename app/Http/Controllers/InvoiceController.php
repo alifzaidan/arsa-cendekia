@@ -298,14 +298,19 @@ class InvoiceController extends Controller
                     'enrollment_id' => $enrollment->id
                 ];
 
-                if ($request->hasFile('ig_follow_proof')) {
-                    $requirementData['ig_follow_proof'] = $request->file('ig_follow_proof')
+                if ($request->hasFile('ig_follow_proof_1')) {
+                    $requirementData['ig_follow_proof_1'] = $request->file('ig_follow_proof_1')
                         ->store('free-requirements/ig', 'public');
                 }
 
-                if ($request->hasFile('tiktok_follow_proof')) {
-                    $requirementData['tiktok_follow_proof'] = $request->file('tiktok_follow_proof')
-                        ->store('free-requirements/tiktok', 'public');
+                if ($request->hasFile('ig_follow_proof_2')) {
+                    $requirementData['ig_follow_proof_2'] = $request->file('ig_follow_proof_2')
+                        ->store('free-requirements/ig', 'public');
+                }
+
+                if ($request->hasFile('ig_follow_proof_3')) {
+                    $requirementData['ig_follow_proof_3'] = $request->file('ig_follow_proof_3')
+                        ->store('free-requirements/ig', 'public');
                 }
 
                 if ($request->hasFile('tag_friend_proof')) {

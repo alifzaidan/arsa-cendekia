@@ -207,27 +207,17 @@ class QuizController extends Controller
                 'answers_summary' => json_encode($answersData),
             ]);
 
-            if ($isPassed) {
-                $existingCompletion = LessonCompletion::where('user_id', $user->id)
-                    ->where('lesson_id', $quiz->lesson->id)
-                    ->first();
+            $existingCompletion = LessonCompletion::where('user_id', $user->id)
+                ->where('lesson_id', $quiz->lesson->id)
+                ->first();
 
-                if (!$existingCompletion) {
-                    LessonCompletion::create([
-                        'id' => Str::uuid(),
-                        'user_id' => $user->id,
-                        'lesson_id' => $quiz->lesson->id,
-                        'completed_at' => now(),
-                    ]);
-
-                    Log::info('Lesson completion saved for passed quiz:', [
-                        'user_id' => $user->id,
-                        'lesson_id' => $quiz->lesson->id,
-                        'quiz_id' => $quiz->id,
-                        'attempt_id' => $attempt->id,
-                        'score' => $scorePercentage
-                    ]);
-                }
+            if (!$existingCompletion) {
+                LessonCompletion::create([
+                    'id' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'lesson_id' => $quiz->lesson->id,
+                    'completed_at' => now(),
+                ]);
             }
 
             Log::info('Quiz submitted successfully:', [

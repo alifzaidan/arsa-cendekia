@@ -434,10 +434,10 @@ export default function CourseDetail({ course, auto_select_lesson_id, progress_i
                 // Check if lesson is completed
                 let isCompleted = lesson.isCompleted || false;
 
-                // For quiz lessons, check if user has passed attempt
+                // ✅ For quiz lessons, mark as completed if there's any attempt (regardless of pass/fail)
                 if (lesson.type === 'quiz' && lesson.quizzes && lesson.quizzes.length > 0) {
-                    const hasPassedAttempt = lesson.quizzes.some((quiz) => quiz.attempts && quiz.attempts.some((attempt) => attempt.is_passed));
-                    isCompleted = hasPassedAttempt;
+                    const hasAnyAttempt = lesson.quizzes.some((quiz) => quiz.attempts && quiz.attempts.length > 0);
+                    isCompleted = isCompleted || hasAnyAttempt;
                 }
 
                 return {
@@ -571,6 +571,18 @@ export default function CourseDetail({ course, auto_select_lesson_id, progress_i
         return selectedLesson.id === lastModule.lessons[lastModule.lessons.length - 1].id;
     })();
 
+    const getQuizStatus = (lesson: Lesson) => {
+        if (lesson.type !== 'quiz' || !lesson.quizzes || lesson.quizzes.length === 0) {
+            return { hasAttempt: false, hasPassed: false };
+        }
+
+        const quiz = lesson.quizzes[0];
+        const hasAttempt = quiz.attempts && quiz.attempts.length > 0;
+        const hasPassed = quiz.attempts && quiz.attempts.some((attempt) => attempt.is_passed);
+
+        return { hasAttempt, hasPassed };
+    };
+
     return (
         <CourseLayout
             breadcrumbs={breadcrumbs}
@@ -630,118 +642,138 @@ export default function CourseDetail({ course, auto_select_lesson_id, progress_i
                         </Button>
                     </div>
                     {/* Status untuk quiz atau materi */}
-                    {selectedLesson && selectedLesson.type === 'quiz' ? (
-                        moduleData.find((m) => m.lessons.find((l) => l.id === selectedLesson.id))?.lessons.find((l) => l.id === selectedLesson.id)
-                            ?.isCompleted ? (
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-2 rounded-lg bg-green-50 px-4 py-2 text-green-600">
-                                    <CheckCircle className="h-5 w-5" />
-                                    <span className="font-medium">Quiz Sudah Lulus</span>
-                                </div>
-                                {/* Tombol Next jika quiz sudah selesai dan bukan di lesson terakhir */}
-                                {(() => {
-                                    if (!selectedLesson) return null;
-                                    if (moduleData.length === 0) return null;
-                                    const lastModule = moduleData[moduleData.length - 1];
-                                    if (lastModule.lessons.length === 0) return null;
-                                    const isLast = selectedLesson.id === lastModule.lessons[lastModule.lessons.length - 1].id;
-                                    if (isLast) return null;
-                                    // Cari next lesson
-                                    let nextLesson: Lesson | null = null;
-                                    let found = false;
-                                    for (const module of moduleData) {
-                                        for (let i = 0; i < module.lessons.length; i++) {
-                                            if (module.lessons[i].id === selectedLesson.id) {
-                                                if (i < module.lessons.length - 1) {
-                                                    nextLesson = module.lessons[i + 1];
-                                                } else {
-                                                    const moduleIndex = moduleData.indexOf(module);
-                                                    if (moduleIndex < moduleData.length - 1) {
-                                                        nextLesson = moduleData[moduleIndex + 1].lessons[0];
-                                                    }
-                                                }
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                        if (found) break;
-                                    }
-                                    if (!nextLesson) return null;
-                                    return (
-                                        <Button variant="outline" onClick={() => setSelectedLesson(nextLesson)} className="gap-2">
-                                            Selanjutnya <ChevronRight className="h-4 w-4" />
-                                        </Button>
-                                    );
-                                })()}
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-blue-600">
-                                <HelpCircle className="h-5 w-5" />
-                                <span className="font-medium">Selesaikan Quiz untuk Melanjutkan</span>
-                            </div>
-                        )
-                    ) : (
-                        selectedLesson &&
-                        selectedLesson.type !== 'quiz' &&
-                        (!moduleData.find((m) => m.lessons.find((l) => l.id === selectedLesson.id))?.lessons.find((l) => l.id === selectedLesson.id)
-                            ?.isCompleted ? (
-                            <Button onClick={() => handleLessonComplete(selectedLesson.id)} size="lg">
-                                <CheckCircle className="mr-2 h-4 w-4" />
-                                Selesaikan Materi
-                            </Button>
-                        ) : (
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-2 rounded-lg bg-green-50 px-4 py-2 text-green-600">
-                                    <CheckCircle className="h-5 w-5" />
-                                    <span className="font-medium">Materi Sudah Selesai</span>
-                                </div>
-                                {/* Tombol Next jika materi sudah selesai dan bukan di lesson terakhir */}
-                                {(() => {
-                                    if (!selectedLesson) return null;
-                                    if (moduleData.length === 0) return null;
-                                    const lastModule = moduleData[moduleData.length - 1];
-                                    if (lastModule.lessons.length === 0) return null;
-                                    const isLast = selectedLesson.id === lastModule.lessons[lastModule.lessons.length - 1].id;
-                                    if (isLast) return null;
-                                    // Cari next lesson
-                                    let nextLesson: Lesson | null = null;
-                                    let found = false;
-                                    for (const module of moduleData) {
-                                        for (let i = 0; i < module.lessons.length; i++) {
-                                            if (module.lessons[i].id === selectedLesson.id) {
-                                                if (i < module.lessons.length - 1) {
-                                                    nextLesson = module.lessons[i + 1];
-                                                } else {
-                                                    const moduleIndex = moduleData.indexOf(module);
-                                                    if (moduleIndex < moduleData.length - 1) {
-                                                        nextLesson = moduleData[moduleIndex + 1].lessons[0];
-                                                    }
-                                                }
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                        if (found) break;
-                                    }
-                                    if (!nextLesson) return null;
-                                    return (
-                                        <Button variant="outline" onClick={() => setSelectedLesson(nextLesson)} className="gap-2">
-                                            Selanjutnya <ChevronRight className="h-4 w-4" />
-                                        </Button>
-                                    );
-                                })()}
-                            </div>
-                        ))
-                    )}
+                    {selectedLesson && selectedLesson.type === 'quiz'
+                        ? (() => {
+                              const currentLesson = moduleData
+                                  .find((m) => m.lessons.find((l) => l.id === selectedLesson.id))
+                                  ?.lessons.find((l) => l.id === selectedLesson.id);
+
+                              const quizStatus = getQuizStatus(selectedLesson);
+
+                              // Cari next lesson
+                              let nextLesson: Lesson | null = null;
+                              let found = false;
+                              for (const module of moduleData) {
+                                  for (let i = 0; i < module.lessons.length; i++) {
+                                      if (module.lessons[i].id === selectedLesson.id) {
+                                          if (i < module.lessons.length - 1) {
+                                              nextLesson = module.lessons[i + 1];
+                                          } else {
+                                              const moduleIndex = moduleData.indexOf(module);
+                                              if (moduleIndex < moduleData.length - 1) {
+                                                  nextLesson = moduleData[moduleIndex + 1].lessons[0];
+                                              }
+                                          }
+                                          found = true;
+                                          break;
+                                      }
+                                  }
+                                  if (found) break;
+                              }
+
+                              // Jika sudah ada attempt (apapun hasilnya)
+                              if (quizStatus.hasAttempt) {
+                                  if (quizStatus.hasPassed) {
+                                      return (
+                                          <div className="flex items-center gap-2">
+                                              <div className="flex items-center gap-2 rounded-lg bg-green-50 px-4 py-2 text-green-600">
+                                                  <CheckCircle className="h-5 w-5" />
+                                                  <span className="font-medium">Quiz Lulus ✨</span>
+                                              </div>
+                                              {nextLesson && !isLastLesson && (
+                                                  <Button variant="outline" onClick={() => setSelectedLesson(nextLesson)} className="gap-2">
+                                                      Selanjutnya <ChevronRight className="h-4 w-4" />
+                                                  </Button>
+                                              )}
+                                          </div>
+                                      );
+                                  } else {
+                                      // Sudah attempt tapi belum lulus - tetap bisa lanjut
+                                      return (
+                                          <div className="flex items-center gap-2">
+                                              <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-4 py-2 text-amber-600">
+                                                  <AlertTriangle className="h-5 w-5" />
+                                                  <span className="font-medium">Quiz Selesai (Bisa Diulang)</span>
+                                              </div>
+                                              {nextLesson && !isLastLesson && (
+                                                  <Button variant="outline" onClick={() => setSelectedLesson(nextLesson)} className="gap-2">
+                                                      Selanjutnya <ChevronRight className="h-4 w-4" />
+                                                  </Button>
+                                              )}
+                                          </div>
+                                      );
+                                  }
+                              } else {
+                                  // Belum ada attempt sama sekali
+                                  return (
+                                      <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-blue-600">
+                                          <HelpCircle className="h-5 w-5" />
+                                          <span className="font-medium">Kerjakan Quiz untuk Melanjutkan</span>
+                                      </div>
+                                  );
+                              }
+                          })()
+                        : // Untuk materi non-quiz
+                          selectedLesson &&
+                          selectedLesson.type !== 'quiz' &&
+                          (!moduleData.find((m) => m.lessons.find((l) => l.id === selectedLesson.id))?.lessons.find((l) => l.id === selectedLesson.id)
+                              ?.isCompleted ? (
+                              <Button onClick={() => handleLessonComplete(selectedLesson.id)} size="lg">
+                                  <CheckCircle className="mr-2 h-4 w-4" />
+                                  Selesaikan Materi
+                              </Button>
+                          ) : (
+                              <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-2 rounded-lg bg-green-50 px-4 py-2 text-green-600">
+                                      <CheckCircle className="h-5 w-5" />
+                                      <span className="font-medium">Materi Sudah Selesai</span>
+                                  </div>
+                                  {/* Tombol Next jika materi sudah selesai dan bukan di lesson terakhir */}
+                                  {(() => {
+                                      if (!selectedLesson) return null;
+                                      if (moduleData.length === 0) return null;
+                                      const lastModule = moduleData[moduleData.length - 1];
+                                      if (lastModule.lessons.length === 0) return null;
+                                      const isLast = selectedLesson.id === lastModule.lessons[lastModule.lessons.length - 1].id;
+                                      if (isLast) return null;
+                                      // Cari next lesson
+                                      let nextLesson: Lesson | null = null;
+                                      let found = false;
+                                      for (const module of moduleData) {
+                                          for (let i = 0; i < module.lessons.length; i++) {
+                                              if (module.lessons[i].id === selectedLesson.id) {
+                                                  if (i < module.lessons.length - 1) {
+                                                      nextLesson = module.lessons[i + 1];
+                                                  } else {
+                                                      const moduleIndex = moduleData.indexOf(module);
+                                                      if (moduleIndex < moduleData.length - 1) {
+                                                          nextLesson = moduleData[moduleIndex + 1].lessons[0];
+                                                      }
+                                                  }
+                                                  found = true;
+                                                  break;
+                                              }
+                                          }
+                                          if (found) break;
+                                      }
+                                      if (!nextLesson) return null;
+                                      return (
+                                          <Button variant="outline" onClick={() => setSelectedLesson(nextLesson)} className="gap-2">
+                                              Selanjutnya <ChevronRight className="h-4 w-4" />
+                                          </Button>
+                                      );
+                                  })()}
+                              </div>
+                          ))}
                 </div>
 
                 {isAllLessonsCompleted && isLastLesson && (
                     <div className="mt-4 flex flex-col items-center justify-center gap-4 md:flex-row">
                         <div className="rounded-lg bg-green-100 px-4 py-2 text-center text-sm font-medium text-green-700">
-                            Anda sudah menyelesaikan kelas silahkan kembali ke halaman awal untuk mendownload sertifikat
+                            🎉 Selamat! Anda sudah menyelesaikan semua materi kelas
                         </div>
                         <Button asChild size="lg">
-                            <Link href={`/profile/my-courses/${course.slug}`}>Kembali ke Halaman Kelas &amp; Download Sertifikat</Link>
+                            <Link href={`/profile/my-courses/${course.slug}`}>Download Sertifikat 🎓</Link>
                         </Button>
                     </div>
                 )}

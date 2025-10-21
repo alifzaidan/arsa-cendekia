@@ -9,13 +9,7 @@ class FreeEnrollmentRequirement extends Model
 {
     use HasUuids;
 
-    protected $fillable = [
-        'enrollment_id',
-        'enrollment_type',
-        'ig_follow_proof',
-        'tag_friend_proof',
-        'tiktok_follow_proof',
-    ];
+    protected $guarded = ['created_at', 'updated_at'];
 
     public function enrollmentWebinar()
     {

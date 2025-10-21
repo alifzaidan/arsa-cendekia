@@ -46,11 +46,9 @@ export default function CheckoutSuccess({ invoice }: InvoiceProps) {
     return (
         <UserLayout>
             <Head title="Checkout Berhasil" />
-            <section className="to-tertiary from-primary my-8 w-full bg-gradient-to-r">
+            <section className="to-tertiary from-primary w-full rounded-b-4xl bg-gradient-to-r">
                 <div className="mx-auto my-16 flex w-full max-w-7xl flex-col items-center px-4">
-                    <h2 className="mb-4 max-w-3xl bg-white bg-clip-text text-center text-3xl font-bold text-transparent sm:text-4xl">
-                        {title}
-                    </h2>
+                    <h2 className="mb-4 max-w-3xl bg-white bg-clip-text text-center text-3xl font-bold text-transparent sm:text-4xl">{title}</h2>
                     <img src="/assets/images/payment-success.png" alt="Pembayaran Berhasil" className="mb-6 w-[300px]" />
                     <p className="mb-6 max-w-xl text-center text-white">
                         Terima kasih telah menyelesaikan pembayaran. Anda sekarang dapat mengakses detail produk dengan klik tombol di bawah ini.
@@ -62,7 +60,7 @@ export default function CheckoutSuccess({ invoice }: InvoiceProps) {
                             {label}
                         </Link>
                     </Button>
-                    <Button variant="outline" className='bg-white' asChild>
+                    <Button variant="outline" className="bg-white" asChild>
                         <a href={route('invoice.pdf', { id: invoice.id })} target="_blank" rel="noopener noreferrer">
                             <FileText className="size-4" />
                             Unduh Invoice

@@ -65,7 +65,7 @@ export default function RegisterSection({ course }: { course: Course }) {
                 {course.price > 0 ? (
                     <span className="text-right text-3xl font-bold text-gray-900 dark:text-gray-100">Rp {course.price.toLocaleString('id-ID')}</span>
                 ) : (
-                    <span className="text-left text-3xl font-bold text-gray-900 dark:text-gray-100">GRATIS</span>
+                    <span className="text-center text-3xl font-bold text-green-600 dark:text-gray-100">GRATIS</span>
                 )}
 
                 <Separator className="my-4" />
@@ -87,7 +87,7 @@ export default function RegisterSection({ course }: { course: Course }) {
                         <p>Materi On Demand</p>
                     </li>
                 </ul>
-                <div className="mt-auto">
+                <div className="mt-4">
                     {warningMessage && <p className="mb-2 text-center text-sm text-red-500">{warningMessage}</p>}
                     <Button className="w-full" asChild>
                         <Link href={registrationUrl}>{buttonText}</Link>

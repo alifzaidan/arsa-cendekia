@@ -15,9 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('enrollment_id');
             $table->string('enrollment_type');
-            $table->string('ig_follow_proof')->nullable();
+            $table->string('ig_follow_proof_1')->nullable();
+            $table->string('ig_follow_proof_2')->nullable();
+            $table->string('ig_follow_proof_3')->nullable();
             $table->string('tag_friend_proof')->nullable();
-            $table->string('tiktok_follow_proof')->nullable();
             $table->timestamps();
 
             $table->index(['enrollment_id', 'enrollment_type']);

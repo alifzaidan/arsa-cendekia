@@ -20,8 +20,9 @@ interface User {
 
 interface FreeRequirement {
     id: string;
-    ig_follow_proof: string | null;
-    tiktok_follow_proof: string | null;
+    ig_follow_proof_1: string | null;
+    ig_follow_proof_2: string | null;
+    ig_follow_proof_3: string | null;
     tag_friend_proof: string | null;
 }
 
@@ -62,14 +63,14 @@ function ProofModal({ requirement, userName }: { requirement: FreeRequirement; u
                     <DialogTitle>Bukti Follow & Tag - {userName}</DialogTitle>
                 </DialogHeader>
 
-                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                        <h4 className="text-sm font-semibold">Bukti Follow Instagram</h4>
-                        {requirement.ig_follow_proof ? (
+                        <h4 className="text-sm font-semibold">Bukti Follow Instagram @arsacendekia</h4>
+                        {requirement.ig_follow_proof_1 ? (
                             <div className="overflow-hidden rounded-lg border">
                                 <img
-                                    src={`/storage/${requirement.ig_follow_proof}`}
-                                    alt="Bukti Follow Instagram"
+                                    src={`/storage/${requirement.ig_follow_proof_1}`}
+                                    alt="Bukti Follow Instagram @arsacendekia"
                                     className="h-auto max-h-64 w-full object-contain"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
@@ -86,12 +87,34 @@ function ProofModal({ requirement, userName }: { requirement: FreeRequirement; u
                     </div>
 
                     <div className="space-y-2">
-                        <h4 className="text-sm font-semibold">Bukti Follow TikTok</h4>
-                        {requirement.tiktok_follow_proof ? (
+                        <h4 className="text-sm font-semibold">Bukti Follow Instagram @lulustarget.idn</h4>
+                        {requirement.ig_follow_proof_1 ? (
                             <div className="overflow-hidden rounded-lg border">
                                 <img
-                                    src={`/storage/${requirement.tiktok_follow_proof}`}
-                                    alt="Bukti Follow TikTok"
+                                    src={`/storage/${requirement.ig_follow_proof_1}`}
+                                    alt="Bukti Follow Instagram @lulustarget.idn"
+                                    className="h-auto max-h-64 w-full object-contain"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = '/placeholder-image.png';
+                                    }}
+                                />
+                            </div>
+                        ) : (
+                            <div className="rounded-lg border p-4 text-center text-gray-500">
+                                <Image className="mx-auto mb-2 size-8" />
+                                <p className="text-sm">Tidak ada bukti</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <h4 className="text-sm font-semibold">Bukti Follow Instagram @zona.accounting</h4>
+                        {requirement.ig_follow_proof_1 ? (
+                            <div className="overflow-hidden rounded-lg border">
+                                <img
+                                    src={`/storage/${requirement.ig_follow_proof_1}`}
+                                    alt="Bukti Follow Instagram @zona.accounting"
                                     className="h-auto max-h-64 w-full object-contain"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
@@ -349,8 +372,9 @@ export const columns: ColumnDef<Invoice>[] = [
 
             const hasProof =
                 invoice.webinar_items[0].free_requirement &&
-                (invoice.webinar_items[0].free_requirement.ig_follow_proof ||
-                    invoice.webinar_items[0].free_requirement.tiktok_follow_proof ||
+                (invoice.webinar_items[0].free_requirement.ig_follow_proof_1 ||
+                    invoice.webinar_items[0].free_requirement.ig_follow_proof_2 ||
+                    invoice.webinar_items[0].free_requirement.ig_follow_proof_3 ||
                     invoice.webinar_items[0].free_requirement.tag_friend_proof);
 
             return (

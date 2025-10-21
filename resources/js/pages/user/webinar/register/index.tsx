@@ -66,14 +66,16 @@ export default function RegisterWebinar({
 
     const [showFreeForm, setShowFreeForm] = useState(false);
     const [freeFormData, setFreeFormData] = useState({
-        ig_follow_proof: null as File | null,
+        ig_follow_proof_1: null as File | null,
+        ig_follow_proof_2: null as File | null,
+        ig_follow_proof_3: null as File | null,
         tag_friend_proof: null as File | null,
-        tiktok_follow_proof: null as File | null,
     });
     const [fileErrors, setFileErrors] = useState({
-        ig_follow_proof: false,
+        ig_follow_proof_1: false,
+        ig_follow_proof_2: false,
+        ig_follow_proof_3: false,
         tag_friend_proof: false,
-        tiktok_follow_proof: false,
     });
 
     const isFree = webinar.price === 0;
@@ -179,7 +181,7 @@ export default function RegisterWebinar({
             return;
         }
 
-        if (!freeFormData.ig_follow_proof || !freeFormData.tag_friend_proof || !freeFormData.tiktok_follow_proof) {
+        if (!freeFormData.ig_follow_proof_1 || !freeFormData.ig_follow_proof_2 || !freeFormData.ig_follow_proof_3 || !freeFormData.tag_friend_proof) {
             alert('Harap upload semua bukti follow dan tag yang diperlukan!');
             return;
         }
@@ -189,9 +191,10 @@ export default function RegisterWebinar({
         const formData = new FormData();
         formData.append('type', 'webinar');
         formData.append('id', webinar.id);
-        formData.append('ig_follow_proof', freeFormData.ig_follow_proof);
+        formData.append('ig_follow_proof_1', freeFormData.ig_follow_proof_1);
+        formData.append('ig_follow_proof_2', freeFormData.ig_follow_proof_2);
+        formData.append('ig_follow_proof_3', freeFormData.ig_follow_proof_3);
         formData.append('tag_friend_proof', freeFormData.tag_friend_proof);
-        formData.append('tiktok_follow_proof', freeFormData.tiktok_follow_proof);
 
         router.post(route('enroll.free'), formData, {
             onError: (errors) => {
@@ -472,7 +475,7 @@ export default function RegisterWebinar({
                                         <p className="text-sm text-gray-600">Untuk mendapatkan akses gratis, Anda perlu:</p>
                                         <ul className="space-y-1 text-left text-sm">
                                             <li>
-                                                • Follow Instagram kami{' '}
+                                                • Follow Instagram{' '}
                                                 <a
                                                     href="https://www.instagram.com/arsacendekia/"
                                                     target="_blank"
@@ -483,14 +486,25 @@ export default function RegisterWebinar({
                                                 </a>
                                             </li>
                                             <li>
-                                                • Follow TikTok kami{' '}
+                                                • Follow Instagram{' '}
                                                 <a
-                                                    href="https://www.tiktok.com/@arsacendekia"
+                                                    href="https://www.instagram.com/lulustarget.idn/"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-blue-600 underline"
                                                 >
-                                                    @arsacendekia
+                                                    @lulustarget.idn
+                                                </a>
+                                            </li>
+                                            <li>
+                                                • Follow Instagram{' '}
+                                                <a
+                                                    href="https://www.instagram.com/zona.accounting/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-600 underline"
+                                                >
+                                                    @zona.accounting
                                                 </a>
                                             </li>
                                             <li>• Tag 3 teman di postingan Instagram kami</li>
@@ -609,7 +623,7 @@ export default function RegisterWebinar({
                                     </div>
                                 )}
                                 <Button className="w-full" type="submit" disabled={(isFree ? false : !termsAccepted) || loading}>
-                                    {loading ? 'Memproses...' : isFree ? 'Upload Bukti Follow' : 'Lanjutkan Pembayaran'}
+                                    {loading ? 'Memproses...' : isFree ? 'Upload Syarat Pendaftaran' : 'Lanjutkan Pembayaran'}
                                 </Button>
                             </div>
                         </form>
@@ -619,42 +633,62 @@ export default function RegisterWebinar({
                             <div className="space-y-4 rounded-lg border p-4">
                                 {/* Bukti Follow Instagram */}
                                 <div>
-                                    <Label htmlFor="ig_follow_proof">Bukti Follow Instagram</Label>
+                                    <Label htmlFor="ig_follow_proof_1">Bukti Follow Instagram @arsacendekia</Label>
                                     <Input
-                                        id="ig_follow_proof"
-                                        data-field="ig_follow_proof"
+                                        id="ig_follow_proof_1"
+                                        data-field="ig_follow_proof_1"
                                         type="file"
                                         accept="image/*"
-                                        onChange={(e) => handleFileChange('ig_follow_proof', e.target.files?.[0] || null)}
-                                        className={fileErrors.ig_follow_proof ? 'border-red-500 focus:ring-red-500' : ''}
+                                        onChange={(e) => handleFileChange('ig_follow_proof_1', e.target.files?.[0] || null)}
+                                        className={fileErrors.ig_follow_proof_1 ? 'border-red-500 focus:ring-red-500' : ''}
                                         required
                                     />
                                     <p className="mt-1 text-xs text-gray-500">
-                                        Screenshot halaman profil Instagram kami yang menunjukkan Anda sudah follow (Maks. 2MB)
+                                        Screenshot halaman profil Instagram kami yang menunjukkan Anda sudah follow @arsacendekia (Maks. 2MB)
                                     </p>
-                                    {fileErrors.ig_follow_proof && (
+                                    {fileErrors.ig_follow_proof_1 && (
                                         <p className="mt-1 text-xs text-red-600">
                                             File tidak valid. Pastikan ukuran tidak melebihi 2MB dan format gambar.
                                         </p>
                                     )}
                                 </div>
 
-                                {/* Bukti Follow TikTok */}
                                 <div>
-                                    <Label htmlFor="tiktok_follow_proof">Bukti Follow TikTok</Label>
+                                    <Label htmlFor="ig_follow_proof_2">Bukti Follow Instagram @lulustarget.idn</Label>
                                     <Input
-                                        id="tiktok_follow_proof"
-                                        data-field="tiktok_follow_proof"
+                                        id="ig_follow_proof_2"
+                                        data-field="ig_follow_proof_2"
                                         type="file"
                                         accept="image/*"
-                                        onChange={(e) => handleFileChange('tiktok_follow_proof', e.target.files?.[0] || null)}
-                                        className={fileErrors.tiktok_follow_proof ? 'border-red-500 focus:ring-red-500' : ''}
+                                        onChange={(e) => handleFileChange('ig_follow_proof_2', e.target.files?.[0] || null)}
+                                        className={fileErrors.ig_follow_proof_2 ? 'border-red-500 focus:ring-red-500' : ''}
                                         required
                                     />
                                     <p className="mt-1 text-xs text-gray-500">
-                                        Screenshot halaman profil TikTok kami yang menunjukkan Anda sudah follow (Maks. 2MB)
+                                        Screenshot halaman profil Instagram kami yang menunjukkan Anda sudah follow @lulustarget.idn (Maks. 2MB)
                                     </p>
-                                    {fileErrors.tiktok_follow_proof && (
+                                    {fileErrors.ig_follow_proof_2 && (
+                                        <p className="mt-1 text-xs text-red-600">
+                                            File tidak valid. Pastikan ukuran tidak melebihi 2MB dan format gambar.
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="ig_follow_proof_3">Bukti Follow Instagram @zona.accounting</Label>
+                                    <Input
+                                        id="ig_follow_proof_3"
+                                        data-field="ig_follow_proof_3"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleFileChange('ig_follow_proof_3', e.target.files?.[0] || null)}
+                                        className={fileErrors.ig_follow_proof_3 ? 'border-red-500 focus:ring-red-500' : ''}
+                                        required
+                                    />
+                                    <p className="mt-1 text-xs text-gray-500">
+                                        Screenshot halaman profil Instagram kami yang menunjukkan Anda sudah follow @zona.accounting (Maks. 2MB)
+                                    </p>
+                                    {fileErrors.ig_follow_proof_3 && (
                                         <p className="mt-1 text-xs text-red-600">
                                             File tidak valid. Pastikan ukuran tidak melebihi 2MB dan format gambar.
                                         </p>
@@ -691,14 +725,16 @@ export default function RegisterWebinar({
                                             setShowFreeForm(false);
                                             // Reset file errors ketika kembali
                                             setFileErrors({
-                                                ig_follow_proof: false,
+                                                ig_follow_proof_1: false,
+                                                ig_follow_proof_2: false,
+                                                ig_follow_proof_3: false,
                                                 tag_friend_proof: false,
-                                                tiktok_follow_proof: false,
                                             });
                                             setFreeFormData({
-                                                ig_follow_proof: null,
+                                                ig_follow_proof_1: null,
+                                                ig_follow_proof_2: null,
+                                                ig_follow_proof_3: null,
                                                 tag_friend_proof: null,
-                                                tiktok_follow_proof: null,
                                             });
                                         }}
                                         className="flex-1"
@@ -709,12 +745,14 @@ export default function RegisterWebinar({
                                         type="submit"
                                         disabled={
                                             loading ||
-                                            !freeFormData.ig_follow_proof ||
+                                            !freeFormData.ig_follow_proof_1 ||
+                                            !freeFormData.ig_follow_proof_2 ||
+                                            !freeFormData.ig_follow_proof_3 ||
                                             !freeFormData.tag_friend_proof ||
-                                            !freeFormData.tiktok_follow_proof ||
-                                            fileErrors.ig_follow_proof ||
-                                            fileErrors.tag_friend_proof ||
-                                            fileErrors.tiktok_follow_proof
+                                            fileErrors.ig_follow_proof_1 ||
+                                            fileErrors.ig_follow_proof_2 ||
+                                            fileErrors.ig_follow_proof_3 ||
+                                            fileErrors.tag_friend_proof
                                         }
                                         className="flex-1"
                                     >
