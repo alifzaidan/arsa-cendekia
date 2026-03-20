@@ -23,7 +23,7 @@ class ProfileController extends Controller
         })->count();
 
         // Ambil enrollment courses dengan progress
-        $enrolledCourses = EnrollmentCourse::with(['course:id,title,slug', 'invoice'])
+        $enrolledCourses = EnrollmentCourse::with(['course:id,title,slug,group_url', 'invoice'])
             ->whereHas('invoice', function ($query) use ($userId) {
                 $query->where('user_id', $userId)->where('status', 'paid');
             })
@@ -35,6 +35,7 @@ class ProfileController extends Controller
                     'id' => $enrollment->course->id,
                     'title' => $enrollment->course->title,
                     'slug' => $enrollment->course->slug,
+                    'group_url' => $enrollment->course->group_url,
                     'type' => 'course',
                     'progress' => $enrollment->progress,
                     'completed_at' => $enrollment->completed_at,

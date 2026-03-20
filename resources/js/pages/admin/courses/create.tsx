@@ -56,6 +56,7 @@ const formSchema = z
         price: z.number().min(0),
         level: z.enum(['beginner', 'intermediate', 'advanced']),
         tools: z.array(z.string()).optional(),
+        group_url: z.string().nullable(),
     })
     .refine(
         (data) => {
@@ -98,6 +99,7 @@ export default function CreateCourse({ categories, tools }: { categories: { id: 
             price: 0,
             level: 'beginner',
             tools: [],
+            group_url: '',
         },
     });
 
@@ -515,6 +517,23 @@ export default function CreateCourse({ categories, tools }: { categories: { id: 
                                                     </FormItem>
                                                 </RadioGroup>
                                             </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="group_url"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Link Group Peserta</FormLabel>
+                                            <Textarea
+                                                {...field}
+                                                value={field.value ?? ''}
+                                                className="w-full rounded border p-2"
+                                                placeholder="Masukkan link grup peserta"
+                                                autoComplete="off"
+                                            />
                                             <FormMessage />
                                         </FormItem>
                                     )}

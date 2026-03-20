@@ -31,6 +31,7 @@ interface Course {
     thumbnail?: string | null;
     course_url: string;
     registration_url: string;
+    group_url?: string | null;
     status: string;
     level: string;
     created_at: string | Date;

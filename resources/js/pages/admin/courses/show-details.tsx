@@ -23,6 +23,7 @@ interface Course {
     thumbnail?: string | null;
     course_url: string;
     registration_url: string;
+    group_url?: string | null;
     status: string;
     level: string;
     created_at: string | Date;
@@ -265,6 +266,10 @@ export default function CourseDetail({ course, averageRating }: { course: Course
                         <TableCell>
                             <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: course.key_points ?? '-' }} />
                         </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Link Group Peserta</TableCell>
+                        <TableCell>{course.group_url || '-'}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
