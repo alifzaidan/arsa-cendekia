@@ -43,6 +43,9 @@ interface Webinar {
     group_url?: string | null;
     host_name?: string | null;
     host_description?: string | null;
+    requirement_1?: string | null;
+    requirement_2?: string | null;
+    requirement_3?: string | null;
     created_at: string | Date;
     tools?: { id: string; name: string; description?: string | null }[];
 }
@@ -65,6 +68,9 @@ const formSchema = z
         group_url: z.string().nullable(),
         batch: z.number().min(0),
         tools: z.array(z.string()).optional(),
+        requirement_1: z.string().nullable(),
+        requirement_2: z.string().nullable(),
+        requirement_3: z.string().nullable(),
     })
     .refine(
         (data) => {
@@ -133,6 +139,9 @@ export default function EditWebinar({
             group_url: webinar.group_url ?? '',
             batch: webinar.batch ?? 1,
             tools: webinar.tools ? webinar.tools.map((tool) => tool.id) : [],
+            requirement_1: webinar.requirement_1 ?? '',
+            requirement_2: webinar.requirement_2 ?? '',
+            requirement_3: webinar.requirement_3 ?? '',
         },
     });
 
@@ -431,23 +440,6 @@ export default function EditWebinar({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="group_url"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Link Group Peserta</FormLabel>
-                                        <Textarea
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            className="w-full rounded border p-2"
-                                            placeholder="Masukkan link grup peserta"
-                                            autoComplete="off"
-                                        />
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                         </div>
                         <div className="space-y-6 rounded-lg border p-4">
                             <div className="flex items-center gap-2">
@@ -718,6 +710,77 @@ export default function EditWebinar({
                                                 ],
                                                 height: 300,
                                             }}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="requirement_1"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Persyaratan 1 (untuk webinar gratis)</FormLabel>
+                                        <Textarea
+                                            {...field}
+                                            value={field.value ?? ''}
+                                            className="w-full rounded border p-2"
+                                            placeholder="Contoh: Follow Instagram @kompeten.idn"
+                                            autoComplete="off"
+                                        />
+                                        <FormDescription>Teks persyaratan pertama yang akan ditampilkan untuk webinar gratis</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="requirement_2"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Persyaratan 2 (untuk webinar gratis)</FormLabel>
+                                        <Textarea
+                                            {...field}
+                                            value={field.value ?? ''}
+                                            className="w-full rounded border p-2"
+                                            placeholder="Contoh: Follow TikTok @kompeten.idn"
+                                            autoComplete="off"
+                                        />
+                                        <FormDescription>Teks persyaratan kedua yang akan ditampilkan untuk webinar gratis</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="requirement_3"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Persyaratan 3 (untuk webinar gratis)</FormLabel>
+                                        <Textarea
+                                            {...field}
+                                            value={field.value ?? ''}
+                                            className="w-full rounded border p-2"
+                                            placeholder="Contoh: Tag 3 teman di postingan Instagram kami"
+                                            autoComplete="off"
+                                        />
+                                        <FormDescription>Teks persyaratan ketiga yang akan ditampilkan untuk webinar gratis</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="group_url"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Link Group Peserta</FormLabel>
+                                        <Textarea
+                                            {...field}
+                                            value={field.value ?? ''}
+                                            className="w-full rounded border p-2"
+                                            placeholder="Masukkan link grup peserta"
+                                            autoComplete="off"
                                         />
                                         <FormMessage />
                                     </FormItem>
