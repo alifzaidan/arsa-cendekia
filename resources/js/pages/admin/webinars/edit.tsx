@@ -725,7 +725,7 @@ export default function EditWebinar({
                                             {...field}
                                             value={field.value ?? ''}
                                             className="w-full rounded border p-2"
-                                            placeholder="Contoh: Follow Instagram @kompeten.idn"
+                                            placeholder="Contoh: Follow Instagram @arsacendekia"
                                             autoComplete="off"
                                         />
                                         <FormDescription>Teks persyaratan pertama yang akan ditampilkan untuk webinar gratis</FormDescription>
@@ -743,7 +743,7 @@ export default function EditWebinar({
                                             {...field}
                                             value={field.value ?? ''}
                                             className="w-full rounded border p-2"
-                                            placeholder="Contoh: Follow TikTok @kompeten.idn"
+                                            placeholder="Contoh: Follow TikTok @arsacendekia"
                                             autoComplete="off"
                                         />
                                         <FormDescription>Teks persyaratan kedua yang akan ditampilkan untuk webinar gratis</FormDescription>
