@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { CheckCircle, Circle, FileDown, FileText, HelpCircle, LogOut, PlayCircle } from 'lucide-react';
+import { CheckCircle, Circle, ClipboardCheck, FileDown, FileText, HelpCircle, LogOut, PlayCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { NavFooter } from './nav-footer';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
@@ -21,7 +21,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/t
 interface Lesson {
     id: string;
     title: string;
-    type: 'video' | 'text' | 'file' | 'quiz';
+    type: 'video' | 'text' | 'file' | 'quiz' | 'assignment';
     isCompleted: boolean;
     quizzes?: any[];
 }
@@ -71,6 +71,7 @@ export function AppSidebarCourse({
         text: <FileText className="text-muted-foreground h-4 w-4" />,
         file: <FileDown className="text-muted-foreground h-4 w-4" />,
         quiz: <HelpCircle className="text-muted-foreground h-4 w-4" />,
+        assignment: <ClipboardCheck className="text-muted-foreground h-4 w-4" />,
     };
 
     // Calculate progress

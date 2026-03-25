@@ -32,13 +32,13 @@
         .certificate-container {
             width: 100%;
             position: relative;
-            padding: 14mm;
-            margin-left: 60mm;
+            padding: 9mm;
+            margin-left: 15mm;
         }
 
         .certificate-content {
-            width: 100%;
-            max-width: 260mm;
+            width: 110%;
+            max-width: 310mm;
             padding: 100px 0px;
             position: relative;
             display: flex;
@@ -57,20 +57,23 @@
         }
 
         .header-bottom {
-            font-size: 48px;
-            margin-bottom: 100px;
+            font-size: 56px;
+            margin-bottom: 50px;
         }
 
         .certificate-title {
-            font-size: 100px;
+            font-size: 170px;
             font-weight: bold;
-            color: #B0822C;
+            color: #003986;
             text-transform: uppercase;
+            max-width: 1720px;
+            line-height: 1;
+            margin-bottom: 30px;
         }
 
         .certificate-subtitle {
-            font-size: 48px;
-            margin-bottom: 80px;
+            font-size: 56px;
+            margin-bottom: 130px;
         }
 
         .content {
@@ -78,25 +81,28 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            margin: 32px 0;
+            margin-top: 32px;
         }
 
         .content-text {
-            font-size: 64px;
-            margin-top: 32px;
+            font-size: 60px;
+            margin-top: 52px;
             margin-bottom: 24px;
         }
 
         .participant-name {
-            font-size: 125px;
+            font-size: 110px;
             font-weight: bold;
-            margin: 0 0 100px 0;
+            text-transform: uppercase;
+            color: #003986;
             display: inline-block;
             min-width: 250px;
+            border-bottom: 4px solid #003986;
+            margin-bottom: 48px;
         }
 
         .program-name {
-            color: #B0822C;
+            color: #003986;
             font-style: italic;
             display: block;
             margin-top: 24px;
@@ -109,8 +115,8 @@
         }
 
         .description {
-            font-size: 48px;
-            max-width: 1720px;
+            font-size: 60px;
+            max-width: 1300px;
         }
 
         .period {
@@ -122,7 +128,7 @@
 
         .footer {
             position: relative;
-            margin-top: 180px;
+            margin-top: 120px;
             height: 120px;
             clear: both;
         }
@@ -137,7 +143,7 @@
             float: right;
             width: 50%;
             text-align: right;
-            margin-top: 150px;
+            margin-top: 40px;
             margin-right: 600px;
         }
 
@@ -148,8 +154,8 @@
         }
 
         .qr-code {
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             margin: 0 0 16px auto;
             border: 2px solid #e5e7eb;
             border-radius: 8px;
@@ -159,8 +165,8 @@
         }
 
         .qr-placeholder {
-            width: 120px;
-            height: 120px;
+            width: 200px;
+            height: 200px;
             margin: 0 auto 16px auto;
             border: 2px dashed #d1d5db;
             border-radius: 8px;
@@ -170,13 +176,13 @@
         }
 
         .certificate-url {
-            font-size: 38px;
-            color: #6b7280;
+            font-size: 48px;
+            color: #003986;
             font-weight: bold;
         }
 
         .certificate-period {
-            font-size: 38px;
+            font-size: 48px;
             margin-bottom: 2px;
         }
 
@@ -194,15 +200,16 @@
         }
 
         .signature-name {
-            font-size: 46px;
+            font-size: 48px;
             font-weight: bold;
+            color: #003986;
             margin-bottom: 2px;
             text-decoration: underline;
         }
 
         .signature-title,
         .signature-date {
-            font-size: 48px;
+            font-size: 56px;
         }
 
         /* Clearfix untuk footer */
@@ -227,12 +234,12 @@
         <div class="certificate-content">
             {{-- Header --}}
             <div class="header">
-                @if($certificate->header_top)
-                <div class="header-top">{{ $certificate->header_top }}</div>
+                @if ($certificate->header_top)
+                    {{-- <div class="header-top">{{ $certificate->header_top }}</div> --}}
                 @endif
 
-                @if($certificate->header_bottom)
-                <div class="header-bottom">NOMOR IZIN KEMENKUMHAM {{ $certificate->header_bottom }}</div>
+                @if ($certificate->header_bottom)
+                    <div class="header-bottom">NOMOR IZIN KEMENKUMHAM {{ $certificate->header_bottom }}</div>
                 @endif
 
                 <div class="certificate-title">CERTIFICATE OF ACHIEVEMENT</div>
@@ -249,63 +256,63 @@
                     {{ $data['participant_name'] }}
                 </div>
 
-                @if($certificate->description)
-                <div class="description">
-                    {{ $certificate->description }}
-                </div>
+                @if ($certificate->description)
+                    <div class="description">
+                        {{ $certificate->description }}
+                    </div>
                 @endif
             </div>
 
             {{-- Footer --}}
             <div class="footer">
                 <div class="signature-container">
-                    <div class="signature-date">Malang, {{
-                        \Carbon\Carbon::parse($certificate->issued_date)->locale('id')->translatedFormat('d F Y') }}
+                    <div class="signature-date">Malang,
+                        {{ \Carbon\Carbon::parse($certificate->issued_date)->locale('id')->translatedFormat('d F Y') }}
                     </div>
                     <div class="signature-space">
-                        @if($certificate->sign && $certificate->sign->image)
-                        <img src="{{ public_path('storage/' . $certificate->sign->image) }}" alt="Tanda Tangan"
-                            class="signature-image">
+                        @if ($certificate->sign && $certificate->sign->image)
+                            <img src="{{ public_path('storage/' . $certificate->sign->image) }}" alt="Tanda Tangan"
+                                class="signature-image">
                         @else
-                        <div style="color: #9ca3af; font-style: italic; font-size: 10px;">Tanda Tangan</div>
+                            <div style="color: #9ca3af; font-style: italic; font-size: 10px;">Tanda Tangan</div>
                         @endif
                     </div>
 
-                    @if($certificate->sign)
-                    <div class="signature-name">{{ $certificate->sign->name }}</div>
-                    <div class="signature-title">
-                        {{ $certificate->sign->position ?? 'Direktur CV. Arsa Cendekia' }}
-                    </div>
+                    @if ($certificate->sign)
+                        <div class="signature-name">{{ $certificate->sign->name }}</div>
+                        <div class="signature-title">
+                            {{ $certificate->sign->position ?? 'Direktur CV. Arsa Cendekia' }}
+                        </div>
                     @else
-                    <div class="signature-name">Direktur</div>
-                    <div class="signature-title">CV. Arsa Cendekia</div>
+                        <div class="signature-name">Direktur</div>
+                        <div class="signature-title">CV. Arsa Cendekia</div>
                     @endif
                 </div>
 
                 <div class="period-section">
                     {{-- QR Code Section --}}
                     <div class="qr-container">
-                        @if($qrCode)
-                        <div class="qr-code">
-                            @if(str_contains($qrCode, 'image/png'))
-                            <img src="{{ $qrCode }}" alt="QR Code"
-                                style="width: 100%; height: 100%; object-fit: contain;">
-                            @else
-                            {!! $qrCode !!}
-                            @endif
-                        </div>
+                        @if ($qrCode)
+                            <div class="qr-code">
+                                @if (str_contains($qrCode, 'image/png'))
+                                    <img src="{{ $qrCode }}" alt="QR Code"
+                                        style="width: 100%; height: 100%; object-fit: contain;">
+                                @else
+                                    {!! $qrCode !!}
+                                @endif
+                            </div>
                         @else
-                        <div class="qr-placeholder">
-                            QR Code<br>Not Available
-                        </div>
+                            <div class="qr-placeholder">
+                                QR Code<br>Not Available
+                            </div>
                         @endif
 
-                        @if($certificateUrl)
-                        <div class="certificate-url">{{ $certificateUrl }}</div>
+                        @if ($certificateUrl)
+                            <div class="certificate-url">{{ $certificateUrl }}</div>
                         @else
-                        <div class="certificate-url">https://arsacendekia.com/certificate/{{ $data['certificate_code']
-                            }}
-                        </div>
+                            <div class="certificate-url">
+                                https://arsacendekia.com/certificate/{{ $data['certificate_code'] }}
+                            </div>
                         @endif
                     </div>
 

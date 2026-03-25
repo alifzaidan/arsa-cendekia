@@ -91,7 +91,7 @@ export default function CreateCertificate({ designs, signs, courses, webinars, p
             title: prefilledData.title || '',
             description: prefilledData.description || '',
             header_top: 'CV ARSA CENDEKIA',
-            header_bottom: 'No: AHU-0071686-AH.0114 Tahun 2025',
+            header_bottom: 'NO: AHU-0071686-AH.0114 TAHUN 2025',
             issued_date: getTodayDate(),
             period: generatePeriod(),
             program_type: prefilledData.program_type as 'course' | 'webinar' | undefined,

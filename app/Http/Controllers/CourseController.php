@@ -146,7 +146,7 @@ class CourseController extends Controller
 
     public function show(string $id)
     {
-        $course = Course::with(['category', 'user', 'tools', 'images', 'modules.lessons.quizzes.questions'])->findOrFail($id);
+        $course = Course::with(['category', 'user', 'tools', 'images', 'modules.lessons.quizzes.questions', 'modules.lessons.assignmentSubmissions.user'])->findOrFail($id);
 
         $transactions = Invoice::with(['user.referrer'])
             ->whereHas('courseItems', function ($query) use ($id) {

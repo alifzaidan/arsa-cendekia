@@ -87,7 +87,7 @@ interface Module {
 interface Lesson {
     id?: string | number;
     title: string;
-    type: 'text' | 'video' | 'file' | 'quiz';
+    type: 'text' | 'video' | 'file' | 'quiz' | 'assignment';
     description?: string;
     is_free: boolean;
     content?: string;
