@@ -35,8 +35,8 @@ export default function RegisterSection({ course }: { course: Course }) {
 
     if (!isLoggedIn) {
         registrationUrl = course.registration_url;
-        buttonText = 'Login untuk Mendaftar';
-        warningMessage = 'Anda harus login terlebih dahulu!';
+        buttonText = 'Gabung Sekarang';
+        warningMessage = null;
     } else if (!isProfileComplete) {
         registrationUrl = route('profile.edit', { redirect: window.location.href });
         buttonText = 'Lengkapi Profil untuk Mendaftar';

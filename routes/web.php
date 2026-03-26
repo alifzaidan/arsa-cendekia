@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AffiliateEarningController;
+use App\Http\Controllers\Auth\CheckoutAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CertificateDesignController;
@@ -47,6 +48,10 @@ Route::get('/certificate/{code}', [CertificateParticipantController::class, 'sho
 
 Route::get('/course/{course:slug}/checkout', [UserCourseController::class, 'showCheckout'])->name('course.checkout');
 Route::get('/webinar/{webinar:slug}/register', [UserWebinarController::class, 'showRegister'])->name('webinar.register');
+Route::post('/api/check-email', [CheckoutAuthController::class, 'checkEmail'])->name('checkout.check-email');
+Route::post('/api/discount-codes/validate', [DiscountCodeController::class, 'validate'])->name('api.discount-codes.validate');
+Route::post('/checkout/auto-login', [CheckoutAuthController::class, 'autoLogin'])->middleware(['guest', 'throttle:10,1'])->name('checkout.auto-login');
+Route::post('/checkout/quick-register', [CheckoutAuthController::class, 'quickRegister'])->middleware(['guest', 'throttle:10,1'])->name('checkout.quick-register');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/course/checkout/success', [UserCourseController::class, 'showCheckoutSuccess'])->name('course.checkout.success');
@@ -100,7 +105,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/course/{course}/rating', [CourseRatingController::class, 'store'])->name('course.rating.store');
 
     Route::get('/invoice/{id}/pdf', [InvoiceController::class, 'generatePDF'])->name('invoice.pdf')->middleware('auth');
-    Route::post('/api/discount-codes/validate', [DiscountCodeController::class, 'validate'])->name('api.discount-codes.validate');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin|mentor|affiliate'])->prefix('admin')->group(function () {

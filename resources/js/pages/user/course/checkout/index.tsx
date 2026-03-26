@@ -6,8 +6,10 @@ import { Separator } from '@/components/ui/separator';
 import UserLayout from '@/layouts/user-layout';
 import { SharedData } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { BadgeCheck, Check, Hourglass, User, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { BadgeCheck, Check, Hourglass, Loader2, User, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 interface Course {
     id: string;
@@ -52,6 +54,25 @@ interface ReferralInfo {
     hasActive: boolean;
 }
 
+type PendingCheckoutData = {
+    courseId: string;
+    productType: 'course';
+    termsAccepted: boolean;
+    promoCode: string;
+    discountData: DiscountData | null;
+    timestamp: number;
+};
+
+type InvoiceData = {
+    type: 'course';
+    id: string;
+    discount_amount: number;
+    nett_amount: number;
+    total_amount: number;
+    discount_code_id?: string;
+    discount_code_amount?: number;
+};
+
 export default function CheckoutCourse({
     course,
     hasAccess,
@@ -65,7 +86,13 @@ export default function CheckoutCourse({
 }) {
     const { auth } = usePage<SharedData>().props;
     const isLoggedIn = !!auth.user;
-    const isProfileComplete = isLoggedIn && auth.user?.phone_number;
+    const isProfileComplete = isLoggedIn && !!auth.user?.phone_number;
+
+    const [guestName, setGuestName] = useState('');
+    const [guestEmail, setGuestEmail] = useState('');
+    const [guestPhone, setGuestPhone] = useState('');
+    const [emailExists, setEmailExists] = useState(false);
+    const [checkingEmail, setCheckingEmail] = useState(false);
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -73,6 +100,10 @@ export default function CheckoutCourse({
     const [discountData, setDiscountData] = useState<DiscountData | null>(null);
     const [promoLoading, setPromoLoading] = useState(false);
     const [promoError, setPromoError] = useState('');
+
+    const submitInFlightRef = useRef(false);
+    const pendingProcessedRef = useRef(false);
+    const pendingTimerRef = useRef<number | null>(null);
 
     const isFree = course.price === 0;
 
@@ -94,6 +125,75 @@ export default function CheckoutCourse({
     }, [referralInfo]);
 
     useEffect(() => {
+        if (isLoggedIn || !guestEmail || !guestEmail.includes('@')) {
+            setEmailExists(false);
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            setCheckingEmail(true);
+            try {
+                const response = await axios.post(route('checkout.check-email'), { email: guestEmail });
+                if (response.data.exists) {
+                    setEmailExists(true);
+                    setGuestName(response.data.name || '');
+                    setGuestPhone(response.data.phone_number || '');
+                } else {
+                    setEmailExists(false);
+                }
+            } catch {
+                setEmailExists(false);
+            } finally {
+                setCheckingEmail(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [guestEmail, isLoggedIn]);
+
+    const validatePromoCode = useCallback(async () => {
+        if (!promoCode.trim() || isFree) return;
+
+        setPromoLoading(true);
+        setPromoError('');
+
+        try {
+            const payload: {
+                code: string;
+                amount: number;
+                product_type: 'course';
+                product_id: string;
+                email?: string;
+            } = {
+                code: promoCode,
+                amount: course.price,
+                product_type: 'course',
+                product_id: course.id,
+            };
+
+            if (!isLoggedIn && emailExists && guestEmail) {
+                payload.email = guestEmail;
+            }
+
+            const response = await axios.post('/api/discount-codes/validate', payload);
+
+            if (response.data.valid) {
+                setDiscountData(response.data);
+                setPromoError('');
+            } else {
+                setDiscountData(null);
+                setPromoError(response.data.message || 'Kode promo tidak valid');
+            }
+        } catch (error) {
+            const message = axios.isAxiosError(error) ? (error.response?.data as { message?: string })?.message : undefined;
+            setDiscountData(null);
+            setPromoError(message || 'Terjadi kesalahan saat memvalidasi kode promo');
+        } finally {
+            setPromoLoading(false);
+        }
+    }, [promoCode, isFree, course.price, course.id, isLoggedIn, emailExists, guestEmail]);
+
+    useEffect(() => {
         if (!promoCode.trim() || isFree) {
             setDiscountData(null);
             setPromoError('');
@@ -101,77 +201,99 @@ export default function CheckoutCourse({
         }
 
         const timer = setTimeout(() => {
-            validatePromoCode();
+            void validatePromoCode();
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [promoCode]);
+    }, [promoCode, isFree, validatePromoCode]);
 
-    const validatePromoCode = async () => {
-        if (!promoCode.trim() || isFree) return;
+    const refreshCSRFToken = useCallback(async (): Promise<string> => {
+        const response = await fetch('/csrf-token', {
+            method: 'GET',
+            credentials: 'same-origin',
+        });
+        const dataRes = await response.json();
 
-        setPromoLoading(true);
-        setPromoError('');
+        const metaTag = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+        if (metaTag) metaTag.content = dataRes.token;
 
-        try {
-            const response = await fetch('/api/discount-codes/validate', {
+        return dataRes.token;
+    }, []);
+
+    const createInvoicePayload = useCallback(
+        (overrideDiscount?: DiscountData | null): InvoiceData => {
+            const activeDiscount = overrideDiscount ?? discountData;
+            const originalDiscountAmount = course.strikethrough_price > 0 ? course.strikethrough_price - course.price : 0;
+            const promoDiscountAmount = activeDiscount?.discount_amount || 0;
+
+            const payload: InvoiceData = {
+                type: 'course',
+                id: course.id,
+                discount_amount: originalDiscountAmount + promoDiscountAmount,
+                nett_amount: course.price - promoDiscountAmount,
+                total_amount: course.price - promoDiscountAmount + 5000,
+            };
+
+            if (activeDiscount?.valid) {
+                payload.discount_code_id = activeDiscount.discount_code.id;
+                payload.discount_code_amount = activeDiscount.discount_amount;
+            }
+
+            return payload;
+        },
+        [discountData, course.id, course.price, course.strikethrough_price],
+    );
+
+    const submitPayment = useCallback(
+        async (payload: InvoiceData, retryCount = 0): Promise<void> => {
+            const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
+
+            const res = await fetch(route('invoice.store'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+                    'X-CSRF-TOKEN': csrfToken,
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({
-                    code: promoCode,
-                    amount: course.price,
-                    product_type: 'course',
-                    product_id: course.id,
-                }),
+                body: JSON.stringify(payload),
             });
 
-            const data = await response.json();
-
-            if (data.valid) {
-                setDiscountData(data);
-                setPromoError('');
-            } else {
-                setDiscountData(null);
-                setPromoError(data.message || 'Kode promo tidak valid');
-            }
-        } catch {
-            setDiscountData(null);
-            setPromoError('Terjadi kesalahan saat memvalidasi kode promo');
-        } finally {
-            setPromoLoading(false);
-        }
-    };
-
-    const refreshCSRFToken = async (): Promise<string> => {
-        try {
-            const response = await fetch('/csrf-token', {
-                method: 'GET',
-                credentials: 'same-origin',
-            });
-            const data = await response.json();
-
-            const metaTag = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
-            if (metaTag) {
-                metaTag.content = data.token;
+            if (res.status === 419 && retryCount < 2) {
+                await refreshCSRFToken();
+                return submitPayment(payload, retryCount + 1);
             }
 
-            return data.token;
-        } catch (error) {
-            console.error('Failed to refresh CSRF token:', error);
-            throw error;
-        }
-    };
+            if (res.status === 401 && retryCount < 2) {
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+                return submitPayment(payload, retryCount + 1);
+            }
+
+            const dataRes = (await res.json().catch(() => ({}))) as { success?: boolean; message?: string; payment_url?: string };
+
+            if (!res.ok || !dataRes.success) {
+                throw new Error(dataRes.message || 'Gagal membuat invoice.');
+            }
+
+            if (!dataRes.payment_url) {
+                throw new Error('Payment URL not received');
+            }
+
+            sessionStorage.removeItem('pendingCheckoutCourse');
+            window.location.href = dataRes.payment_url;
+        },
+        [refreshCSRFToken],
+    );
 
     const handleFreeCheckout = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!isProfileComplete) {
-            alert('Profil Anda belum lengkap! Harap lengkapi nomor telepon terlebih dahulu.');
-            window.location.href = route('profile.edit');
+            toast.error('Profil Anda belum lengkap! Harap lengkapi nomor telepon terlebih dahulu.');
+            setTimeout(() => {
+                window.location.href = route('profile.edit');
+            }, 1200);
             return;
         }
 
@@ -185,8 +307,7 @@ export default function CheckoutCourse({
             },
             {
                 onError: (errors) => {
-                    console.log('Free enrollment errors:', errors);
-                    alert(errors.message || 'Gagal mendaftar kelas gratis.');
+                    toast.error((errors as { message?: string }).message || 'Gagal mendaftar kelas gratis.');
                 },
                 onFinish: () => {
                     setLoading(false);
@@ -195,134 +316,163 @@ export default function CheckoutCourse({
         );
     };
 
+    const handleGuestAuthentication = async () => {
+        if (!guestEmail || !guestName || !guestPhone) {
+            toast.error('Lengkapi nama, email, dan nomor telepon terlebih dahulu.');
+            return false;
+        }
+
+        try {
+            if (emailExists) {
+                const response = await axios.post(route('checkout.auto-login'), {
+                    email: guestEmail,
+                    phone_number: guestPhone,
+                });
+
+                if (!response.data.success) {
+                    throw new Error(response.data.message || 'Login gagal. Pastikan nomor telepon sesuai.');
+                }
+
+                toast.success('Login berhasil, menyiapkan checkout...');
+            } else {
+                await axios.post(route('checkout.quick-register'), {
+                    name: guestName,
+                    email: guestEmail,
+                    phone_number: guestPhone,
+                });
+
+                toast.success('Akun berhasil dibuat, menyiapkan checkout...');
+            }
+
+            if (!isFree) {
+                sessionStorage.setItem(
+                    'pendingCheckoutCourse',
+                    JSON.stringify({
+                        courseId: course.id,
+                        productType: 'course',
+                        termsAccepted,
+                        promoCode,
+                        discountData,
+                        timestamp: Date.now(),
+                    } satisfies PendingCheckoutData),
+                );
+            }
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 900);
+
+            return true;
+        } catch (error) {
+            const message = axios.isAxiosError(error)
+                ? (error.response?.data as { message?: string })?.message
+                : error instanceof Error
+                  ? error.message
+                  : 'Gagal login/registrasi otomatis.';
+            toast.error(message || 'Gagal login/registrasi otomatis.');
+            return false;
+        }
+    };
+
     const handleCheckout = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!isLoggedIn) {
+            setLoading(true);
+            const success = await handleGuestAuthentication();
+            if (!success) {
+                setLoading(false);
+            }
+            return;
+        }
+
         if (!isProfileComplete) {
-            alert('Profil Anda belum lengkap! Harap lengkapi nomor telepon terlebih dahulu.');
-            window.location.href = route('profile.edit');
+            toast.error('Profil Anda belum lengkap! Harap lengkapi nomor telepon terlebih dahulu.');
+            setTimeout(() => {
+                window.location.href = route('profile.edit');
+            }, 1200);
             return;
         }
 
         if (!termsAccepted && !isFree) {
-            alert('Anda harus menyetujui syarat dan ketentuan!');
+            toast.error('Anda harus menyetujui syarat dan ketentuan!');
             return;
         }
 
+        if (submitInFlightRef.current) return;
+        submitInFlightRef.current = true;
         setLoading(true);
 
         if (isFree) {
-            return handleFreeCheckout(e);
+            handleFreeCheckout(e);
+            submitInFlightRef.current = false;
+            return;
         }
 
-        const submitPayment = async (retryCount = 0): Promise<void> => {
-            const originalDiscountAmount = course.strikethrough_price > 0 ? course.strikethrough_price - course.price : 0;
-            const promoDiscountAmount = discountData?.discount_amount || 0;
-
-            const invoiceData: any = {
-                type: 'course',
-                id: course.id,
-                discount_amount: originalDiscountAmount + promoDiscountAmount,
-                nett_amount: finalCoursePrice,
-                transaction_fee: transactionFee,
-                total_amount: totalPrice,
-            };
-
-            if (discountData?.valid) {
-                invoiceData.discount_code_id = discountData.discount_code.id;
-                invoiceData.discount_code_amount = discountData.discount_amount;
-            }
-
-            try {
-                const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-
-                const res = await fetch(route('invoice.store'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '',
-                        Accept: 'application/json',
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify(invoiceData),
-                });
-
-                // Handle 419 error with retry
-                if (res.status === 419 && retryCount < 2) {
-                    console.log(`CSRF token expired, refreshing... (attempt ${retryCount + 1})`);
-                    await refreshCSRFToken();
-                    return submitPayment(retryCount + 1);
-                }
-
-                const data = await res.json();
-
-                if (res.ok && data.success) {
-                    if (data.payment_url) {
-                        window.location.href = data.payment_url;
-                    } else {
-                        throw new Error('Payment URL not received');
-                    }
-                } else {
-                    throw new Error(data.message || 'Gagal membuat invoice.');
-                }
-            } catch (error) {
-                console.error('Payment error:', error);
-                throw error;
-            }
-        };
-
         try {
-            await submitPayment();
-        } catch (error: any) {
-            alert(error.message || 'Terjadi kesalahan saat proses pembayaran.');
+            await submitPayment(createInvoicePayload());
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Terjadi kesalahan saat proses pembayaran.';
+            toast.error(message);
             setLoading(false);
+            submitInFlightRef.current = false;
         }
     };
 
-    if (!isLoggedIn) {
-        const currentUrl = window.location.href;
-        const loginUrl = route('login', { redirect: currentUrl });
+    useEffect(() => {
+        const raw = sessionStorage.getItem('pendingCheckoutCourse');
+        if (!raw || !isLoggedIn || pendingProcessedRef.current) return;
 
-        return (
-            <UserLayout>
-                <Head title="Login Required" />
+        pendingProcessedRef.current = true;
 
-                <section className="to-tertiary from-primary w-full bg-gradient-to-br px-4">
-                    <div className="mx-auto my-12 w-full max-w-7xl px-4">
-                        <h2 className="mx-auto mb-4 max-w-3xl text-center text-3xl font-bold text-white sm:text-4xl">
-                            Daftar Kelas Online "{course.title}"
-                        </h2>
-                        <img
-                            src={course.thumbnail ? `/storage/${course.thumbnail}` : '/assets/images/placeholder.png'}
-                            alt={course.title}
-                            className="mx-auto my-6 w-full max-w-xl rounded-lg border border-gray-200 shadow-md"
-                        />
-                        <p className="text-center text-gray-200">Silakan login terlebih dahulu untuk mendaftar kelas online.</p>
-                    </div>
-                </section>
-                <section className="mx-auto my-4 w-full max-w-7xl px-4">
-                    <div className="flex h-full flex-col items-center justify-center space-y-4 rounded-lg border p-6 text-center">
-                        <User size={64} className="text-blue-500" />
-                        <h2 className="text-xl font-bold">Login Diperlukan</h2>
-                        <p className="text-sm text-gray-500">
-                            Anda perlu login terlebih dahulu untuk mendaftar kelas online ini.
-                            {referralInfo.hasActive && ' Kode referral Anda akan tetap tersimpan.'}
-                        </p>
-                        <div className="flex w-full max-w-md gap-2">
-                            <Button asChild className="flex-1">
-                                <a href={loginUrl}>Login</a>
-                            </Button>
-                            <Button asChild variant="outline" className="flex-1">
-                                <Link href={route('register', referralInfo.code ? { ref: referralInfo.code } : {})}>Daftar</Link>
-                            </Button>
-                        </div>
-                    </div>
-                </section>
-            </UserLayout>
-        );
-    }
+        let checkoutData: PendingCheckoutData;
+        try {
+            checkoutData = JSON.parse(raw) as PendingCheckoutData;
+        } catch {
+            sessionStorage.removeItem('pendingCheckoutCourse');
+            return;
+        }
 
-    if (!isProfileComplete) {
+        const fiveMinutes = 5 * 60 * 1000;
+        if (Date.now() - (checkoutData.timestamp || 0) > fiveMinutes) {
+            sessionStorage.removeItem('pendingCheckoutCourse');
+            toast.error('Sesi checkout telah kedaluwarsa. Silakan ulangi checkout.');
+            return;
+        }
+
+        if (checkoutData.courseId !== course.id) {
+            sessionStorage.removeItem('pendingCheckoutCourse');
+            return;
+        }
+
+        if (checkoutData.promoCode) setPromoCode(checkoutData.promoCode);
+        if (checkoutData.discountData) setDiscountData(checkoutData.discountData);
+        setTermsAccepted(!!checkoutData.termsAccepted);
+
+        pendingTimerRef.current = window.setTimeout(async () => {
+            if (submitInFlightRef.current) return;
+            submitInFlightRef.current = true;
+            setLoading(true);
+
+            try {
+                await submitPayment(createInvoicePayload(checkoutData.discountData ?? null));
+            } catch (error) {
+                const message = error instanceof Error ? error.message : 'Terjadi kesalahan saat proses pembayaran.';
+                toast.error(message);
+                sessionStorage.removeItem('pendingCheckoutCourse');
+                setLoading(false);
+                submitInFlightRef.current = false;
+            }
+        }, 1000);
+
+        return () => {
+            if (pendingTimerRef.current) {
+                clearTimeout(pendingTimerRef.current);
+            }
+        };
+    }, [isLoggedIn, course.id, createInvoicePayload, submitPayment]);
+
+    if (isLoggedIn && !isProfileComplete) {
         return (
             <UserLayout>
                 <Head title="Checkout Kelas" />
@@ -372,7 +522,65 @@ export default function CheckoutCourse({
                 </div>
             </section>
             <section className="mx-auto my-4 w-full max-w-7xl px-4">
-                <div className="w-full">
+                <div className="w-full space-y-4">
+                    {!isLoggedIn && (
+                        <div className="space-y-3 rounded-lg border p-4">
+                            <h3 className="text-base font-semibold">Data Peserta</h3>
+                            <p className="text-sm text-gray-500">Isi data berikut untuk checkout tanpa login manual.</p>
+                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                <div className="md:col-span-2">
+                                    <Label htmlFor="guest-email">Email</Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="guest-email"
+                                            type="email"
+                                            value={guestEmail}
+                                            onChange={(e) => setGuestEmail(e.target.value)}
+                                            placeholder="nama@email.com"
+                                            className="pr-10"
+                                        />
+                                        <div className="absolute top-1/2 right-3 -translate-y-1/2">
+                                            {checkingEmail ? (
+                                                <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                                            ) : emailExists ? (
+                                                <Check className="h-4 w-4 text-green-600" />
+                                            ) : null}
+                                        </div>
+                                    </div>
+                                    {emailExists && <p className="mt-1 text-xs text-blue-600">Email ditemukan, data akan disesuaikan otomatis.</p>}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="guest-name">Nama</Label>
+                                    <Input
+                                        id="guest-name"
+                                        type="text"
+                                        value={guestName}
+                                        onChange={(e) => setGuestName(e.target.value)}
+                                        placeholder="Nama lengkap"
+                                        disabled={emailExists}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="guest-phone">No. Telepon</Label>
+                                    <Input
+                                        id="guest-phone"
+                                        type="tel"
+                                        value={guestPhone}
+                                        onChange={(e) => setGuestPhone(e.target.value)}
+                                        placeholder="08xxxxxxxxxx"
+                                        disabled={emailExists}
+                                    />
+                                    {emailExists ? (
+                                        <p className="mt-1 text-xs text-blue-600">No. telepon mengikuti data akun yang sudah terdaftar.</p>
+                                    ) : (
+                                        <p className="mt-1 text-xs text-gray-500">No. telepon akan digunakan sebagai password akun Anda.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {hasAccess ? (
                         <div className="flex h-full flex-col items-center justify-center space-y-4 rounded-lg border p-6 text-center">
                             <BadgeCheck size={64} className="text-green-500" />
@@ -403,7 +611,6 @@ export default function CheckoutCourse({
                                     </div>
                                 ) : (
                                     <>
-                                        {/* Promo Code Input */}
                                         <div className="space-y-2">
                                             <Label htmlFor="promo-code">Kode Promo (Opsional)</Label>
                                             <div className="relative">
@@ -469,7 +676,6 @@ export default function CheckoutCourse({
                                                 <span className="font-semibold text-gray-500">Rp {course.price.toLocaleString('id-ID')}</span>
                                             </div>
 
-                                            {/* Promo Discount */}
                                             {discountData?.valid && (
                                                 <div className="flex items-center justify-between">
                                                     <span className="text-gray-600">Diskon Promo ({discountData.discount_code.code})</span>
@@ -513,7 +719,15 @@ export default function CheckoutCourse({
                                     </div>
                                 )}
                                 <Button className="w-full" type="submit" disabled={(isFree ? false : !termsAccepted) || loading}>
-                                    {loading ? 'Memproses...' : isFree ? 'Dapatkan Akses Gratis Sekarang' : 'Lanjutkan Pembayaran'}
+                                    {loading
+                                        ? 'Memproses...'
+                                        : !isLoggedIn
+                                          ? isFree
+                                              ? 'Buat Akun & Dapatkan Akses Gratis'
+                                              : 'Lanjutkan & Buat Akun Otomatis'
+                                          : isFree
+                                            ? 'Dapatkan Akses Gratis Sekarang'
+                                            : 'Lanjutkan Pembayaran'}
                                 </Button>
                             </div>
                         </form>

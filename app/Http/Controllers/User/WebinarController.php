@@ -80,35 +80,37 @@ class WebinarController extends Controller
     {
         $this->handleReferralCode($request);
 
-        if (!Auth::check()) {
-            $currentUrl = $request->fullUrl();
-            return redirect()->route('login', ['redirect' => $currentUrl]);
-        }
+        // if (!Auth::check()) {
+        //     $currentUrl = $request->fullUrl();
+        //     return redirect()->route('login', ['redirect' => $currentUrl]);
+        // }
 
         $webinar->load(['tools']);
         $hasAccess = false;
         $pendingInvoiceUrl = null;
 
-        $userId = Auth::id();
+        if (Auth::check()) {
+            $userId = Auth::id();
 
-        $hasAccess = Invoice::where('user_id', $userId)
-            ->where('status', 'paid')
-            ->whereHas('webinarItems', function ($query) use ($webinar) {
-                $query->where('webinar_id', $webinar->id);
-            })
-            ->exists();
-
-        if (!$hasAccess) {
-            $pendingInvoice = Invoice::where('user_id', $userId)
-                ->where('status', 'pending')
+            $hasAccess = Invoice::where('user_id', $userId)
+                ->where('status', 'paid')
                 ->whereHas('webinarItems', function ($query) use ($webinar) {
                     $query->where('webinar_id', $webinar->id);
                 })
-                ->latest()
-                ->first();
+                ->exists();
 
-            if ($pendingInvoice && $pendingInvoice->invoice_url) {
-                $pendingInvoiceUrl = $pendingInvoice->invoice_url;
+            if (!$hasAccess) {
+                $pendingInvoice = Invoice::where('user_id', $userId)
+                    ->where('status', 'pending')
+                    ->whereHas('webinarItems', function ($query) use ($webinar) {
+                        $query->where('webinar_id', $webinar->id);
+                    })
+                    ->latest()
+                    ->first();
+
+                if ($pendingInvoice && $pendingInvoice->invoice_url) {
+                    $pendingInvoiceUrl = $pendingInvoice->invoice_url;
+                }
             }
         }
 

@@ -78,35 +78,32 @@ class CourseController extends Controller
     {
         $this->handleReferralCode($request);
 
-        if (!Auth::check()) {
-            $currentUrl = $request->fullUrl();
-            return redirect()->route('login', ['redirect' => $currentUrl]);
-        }
-
         $course->load(['modules.lessons']);
         $hasAccess = false;
         $pendingInvoiceUrl = null;
 
-        $userId = Auth::id();
+        if (Auth::check()) {
+            $userId = Auth::id();
 
-        $hasAccess = Invoice::where('user_id', $userId)
-            ->where('status', 'paid')
-            ->whereHas('courseItems', function ($query) use ($course) {
-                $query->where('course_id', $course->id);
-            })
-            ->exists();
-
-        if (!$hasAccess) {
-            $pendingInvoice = Invoice::where('user_id', $userId)
-                ->where('status', 'pending')
+            $hasAccess = Invoice::where('user_id', $userId)
+                ->where('status', 'paid')
                 ->whereHas('courseItems', function ($query) use ($course) {
                     $query->where('course_id', $course->id);
                 })
-                ->latest()
-                ->first();
+                ->exists();
 
-            if ($pendingInvoice && $pendingInvoice->invoice_url) {
-                $pendingInvoiceUrl = $pendingInvoice->invoice_url;
+            if (!$hasAccess) {
+                $pendingInvoice = Invoice::where('user_id', $userId)
+                    ->where('status', 'pending')
+                    ->whereHas('courseItems', function ($query) use ($course) {
+                        $query->where('course_id', $course->id);
+                    })
+                    ->latest()
+                    ->first();
+
+                if ($pendingInvoice && $pendingInvoice->invoice_url) {
+                    $pendingInvoiceUrl = $pendingInvoice->invoice_url;
+                }
             }
         }
 

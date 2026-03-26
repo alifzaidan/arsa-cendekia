@@ -230,7 +230,7 @@ class InvoiceController extends Controller
         try {
 
             $request->validate([
-                'type' => 'required|string|in:course,bootcamp,webinar',
+                'type' => 'required|string|in:course,webinar',
                 'id' => 'required',
 
                 'requirement_1_proof' => 'nullable|image|max:2048',

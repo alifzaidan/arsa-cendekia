@@ -128,7 +128,7 @@
 
         .footer {
             position: relative;
-            margin-top: 120px;
+            margin-top: 80px;
             height: 120px;
             clear: both;
         }
@@ -143,7 +143,7 @@
             float: right;
             width: 50%;
             text-align: right;
-            margin-top: 40px;
+            margin-top: 90px;
             margin-right: 600px;
         }
 
@@ -188,15 +188,16 @@
 
         .signature-space {
             width: 150px;
-            height: 200px;
+            height: 250px;
             margin-bottom: 8px;
             position: relative;
         }
 
         .signature-image {
-            max-width: 700px;
-            max-height: 700px;
+            max-width: 400px;
+            max-height: 400px;
             object-fit: contain;
+            margin-left: 170px;
         }
 
         .signature-name {
