@@ -12,7 +12,7 @@ use Milon\Barcode\DNS2D;
 
 class CertificatePdfService
 {
-    private $dompdf;
+    private $options;
 
     public function __construct()
     {
@@ -24,7 +24,7 @@ class CertificatePdfService
         $options->set('debugKeepTemp', false);
         $options->set('debugCss', false);
         $options->set('tempDir', storage_path('app/temp'));
-        $options->set('dpi', 250);
+        $options->set('dpi', 150);
 
         $options->set('chroot', [
             public_path(),
@@ -32,7 +32,7 @@ class CertificatePdfService
             base_path()
         ]);
 
-        $this->dompdf = new Dompdf($options);
+        $this->options = $options;
     }
 
     public function generatePreview(Certificate $certificate)
@@ -60,11 +60,15 @@ class CertificatePdfService
 
             $html = $this->generateHtml($certificate, $dummyData, $qrCodeBase64, $certificateUrl);
 
-            $this->dompdf->loadHtml($html);
-            $this->dompdf->setPaper('A4', 'landscape');
-            $this->dompdf->render();
+            $dompdf = new Dompdf($this->options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
 
-            return $this->dompdf->output();
+            $output = $dompdf->output();
+            unset($dompdf);
+
+            return $output;
         } catch (\Exception $e) {
             Log::error('Error generating certificate preview: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
@@ -95,11 +99,15 @@ class CertificatePdfService
 
             $html = $this->generateHtml($certificate, $participantData, $qrCodeBase64, $certificateUrl);
 
-            $this->dompdf->loadHtml($html);
-            $this->dompdf->setPaper('A4', 'landscape');
-            $this->dompdf->render();
+            $dompdf = new Dompdf($this->options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
 
-            return $this->dompdf->output();
+            $output = $dompdf->output();
+            unset($dompdf);
+
+            return $output;
         } catch (\Exception $e) {
             Log::error('Error generating participant certificate: ' . $e->getMessage());
             throw $e;

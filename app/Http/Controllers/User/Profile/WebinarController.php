@@ -130,7 +130,7 @@ class WebinarController extends Controller
             $enrollmentWebinar = $webinar->webinarItems->first();
             $webinarData = $enrollmentWebinar->webinar;
 
-            if (!$enrollmentWebinar->attendance_verified || !$enrollmentWebinar->review || !$enrollmentWebinar->rating) {
+            if (!$enrollmentWebinar->attendance_verified || !$enrollmentWebinar->review) {
                 return back()->with('error', 'Silakan upload bukti kehadiran dan berikan review terlebih dahulu.');
             }
 
@@ -186,7 +186,7 @@ class WebinarController extends Controller
             $enrollmentWebinar = $webinar->webinarItems->first();
             $webinarData = $enrollmentWebinar->webinar;
 
-            if (!$enrollmentWebinar->attendance_verified || !$enrollmentWebinar->review || !$enrollmentWebinar->rating) {
+            if (!$enrollmentWebinar->attendance_verified || !$enrollmentWebinar->review) {
                 return back()->with('error', 'Silakan upload bukti kehadiran dan berikan review terlebih dahulu.');
             }
 

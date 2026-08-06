@@ -257,18 +257,37 @@ class CertificateController extends Controller
     }
 
     /**
-     * Download semua sertifikat dalam ZIP
+     * Download semua sertifikat dalam ZIP (mendukung batching offset & limit)
      */
-    public function downloadAll(Certificate $certificate)
+    public function downloadAll(Request $request, Certificate $certificate)
     {
+        @ini_set('memory_limit', '1024M');
+        @set_time_limit(600);
+
         try {
             $this->syncParticipants($certificate);
 
-            $certificate->load(['participants.user']);
-            $participants = $certificate->participants;
+            $query = CertificateParticipant::where('certificate_id', $certificate->id)->with('user');
+            $totalParticipants = $query->count();
+
+            if ($totalParticipants === 0) {
+                return back()->with('error', 'Tidak ada peserta untuk sertifikat ini.');
+            }
+
+            if ($request->has('offset') && $request->has('limit')) {
+                $offset = max(0, (int) $request->get('offset'));
+                $limit = max(1, (int) $request->get('limit'));
+                $participants = $query->skip($offset)->take($limit)->get();
+                $startNum = $offset + 1;
+                $endNum = $offset + $participants->count();
+                $batchSuffix = "-batch-{$startNum}-{$endNum}";
+            } else {
+                $participants = $query->get();
+                $batchSuffix = '';
+            }
 
             if ($participants->isEmpty()) {
-                return back()->with('error', 'Tidak ada peserta untuk sertifikat ini.');
+                return back()->with('error', 'Tidak ada peserta pada batch ini.');
             }
 
             if (!class_exists('ZipArchive')) {
@@ -276,7 +295,7 @@ class CertificateController extends Controller
             }
 
             $zip = new ZipArchive();
-            $zipFileName = 'sertifikat-' . Str::slug($certificate->title) . '-' . time() . '.zip';
+            $zipFileName = 'sertifikat-' . Str::slug($certificate->title) . $batchSuffix . '-' . time() . '.zip';
             $tempDirPath = storage_path('app/temp');
 
             if (!file_exists($tempDirPath)) {
@@ -289,6 +308,7 @@ class CertificateController extends Controller
                 return back()->with('error', 'Gagal membuat file ZIP sertifikat.');
             }
 
+            $counter = 0;
             foreach ($participants as $participant) {
                 if (!$participant->user) {
                     continue;
@@ -299,6 +319,11 @@ class CertificateController extends Controller
                 $pdfFileName = "sertifikat-{$participant->certificate_code}-{$userName}.pdf";
 
                 $zip->addFromString($pdfFileName, $pdfData);
+
+                $counter++;
+                if ($counter % 10 === 0) {
+                    gc_collect_cycles();
+                }
             }
 
             $zip->close();

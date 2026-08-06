@@ -112,9 +112,38 @@ export default function ShowCertificate({ certificate, flash }: CertificateProps
                             <Button asChild className="w-full" variant="default">
                                 <a href={route('certificates.download.all', { certificate: certificate.id })} target="_blank">
                                     <Download className="h-4 w-4" />
-                                    Unduh Semua Sertifikat
+                                    Unduh Semua Sertifikat ({certificate.participants?.length || 0})
                                 </a>
                             </Button>
+
+                            {certificate.participants && certificate.participants.length > 50 && (
+                                <div className="space-y-2 border-t pt-3">
+                                    <p className="text-muted-foreground text-xs font-medium">
+                                        Unduh per Batch (Mencegah Server Timeout):
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {Array.from({ length: Math.ceil(certificate.participants.length / 50) }).map((_, index) => {
+                                            const offset = index * 50;
+                                            const end = Math.min(offset + 50, certificate.participants!.length);
+                                            return (
+                                                <Button key={index} asChild variant="outline" size="sm" className="text-xs">
+                                                    <a
+                                                        href={route('certificates.download.all', {
+                                                            certificate: certificate.id,
+                                                            offset,
+                                                            limit: 50,
+                                                        })}
+                                                        target="_blank"
+                                                    >
+                                                        <Download className="mr-1 h-3 w-3" />
+                                                        Batch {index + 1} ({offset + 1}-{end})
+                                                    </a>
+                                                </Button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
 
                             <Separator />
 
