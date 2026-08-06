@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('attendance_proof')->nullable();
             $table->boolean('attendance_verified')->default(false);
             $table->text('review')->nullable();
+            $table->integer('rating')->nullable();
             $table->timestamps();
         });
     }
