@@ -24,7 +24,7 @@ class CertificatePdfService
         $options->set('debugKeepTemp', false);
         $options->set('debugCss', false);
         $options->set('tempDir', storage_path('app/temp'));
-        $options->set('dpi', 150);
+        $options->set('dpi', 250);
 
         $options->set('chroot', [
             public_path(),

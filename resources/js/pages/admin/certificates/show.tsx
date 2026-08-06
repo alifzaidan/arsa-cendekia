@@ -116,22 +116,22 @@ export default function ShowCertificate({ certificate, flash }: CertificateProps
                                 </a>
                             </Button>
 
-                            {certificate.participants && certificate.participants.length > 50 && (
+                            {certificate.participants && certificate.participants.length > 25 && (
                                 <div className="space-y-2 border-t pt-3">
                                     <p className="text-muted-foreground text-xs font-medium">
                                         Unduh per Batch (Mencegah Server Timeout):
                                     </p>
                                     <div className="grid grid-cols-2 gap-2">
-                                        {Array.from({ length: Math.ceil(certificate.participants.length / 50) }).map((_, index) => {
-                                            const offset = index * 50;
-                                            const end = Math.min(offset + 50, certificate.participants!.length);
+                                        {Array.from({ length: Math.ceil(certificate.participants.length / 25) }).map((_, index) => {
+                                            const offset = index * 25;
+                                            const end = Math.min(offset + 25, certificate.participants!.length);
                                             return (
                                                 <Button key={index} asChild variant="outline" size="sm" className="text-xs">
                                                     <a
                                                         href={route('certificates.download.all', {
                                                             certificate: certificate.id,
                                                             offset,
-                                                            limit: 50,
+                                                            limit: 25,
                                                         })}
                                                         target="_blank"
                                                     >
