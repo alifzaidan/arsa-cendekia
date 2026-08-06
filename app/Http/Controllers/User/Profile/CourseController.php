@@ -58,9 +58,10 @@ class CourseController extends Controller
             $certificate = Certificate::where('course_id', $courseId)->first();
 
             if ($certificate) {
-                $certificateParticipant = CertificateParticipant::where('certificate_id', $certificate->id)
-                    ->where('user_id', $userId)
-                    ->first();
+                $certificateParticipant = CertificateParticipant::firstOrCreate([
+                    'certificate_id' => $certificate->id,
+                    'user_id' => $userId,
+                ]);
             }
         }
 
@@ -111,13 +112,10 @@ class CourseController extends Controller
                 return back()->with('error', 'Sertifikat belum dibuat untuk course ini.');
             }
 
-            $participant = CertificateParticipant::where('certificate_id', $certificate->id)
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$participant) {
-                return back()->with('error', 'Data participant sertifikat tidak ditemukan.');
-            }
+            $participant = CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $userId,
+            ]);
 
             $pdf = $this->pdfService->generateParticipantCertificate($participant);
             $filename = 'sertifikat-' . $participant->certificate_code . '.pdf';
@@ -169,13 +167,10 @@ class CourseController extends Controller
                 return back()->with('error', 'Sertifikat belum dibuat untuk course ini.');
             }
 
-            $participant = CertificateParticipant::where('certificate_id', $certificate->id)
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$participant) {
-                return back()->with('error', 'Data participant sertifikat tidak ditemukan.');
-            }
+            $participant = CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $userId,
+            ]);
 
             $pdf = $this->pdfService->generateParticipantCertificate($participant);
 

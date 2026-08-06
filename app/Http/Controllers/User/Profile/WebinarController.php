@@ -52,9 +52,10 @@ class WebinarController extends Controller
             $certificate = Certificate::where('webinar_id', $webinarId)->first();
 
             if ($certificate) {
-                $certificateParticipant = CertificateParticipant::where('certificate_id', $certificate->id)
-                    ->where('user_id', $userId)
-                    ->first();
+                $certificateParticipant = CertificateParticipant::firstOrCreate([
+                    'certificate_id' => $certificate->id,
+                    'user_id' => $userId,
+                ]);
             }
         }
 
@@ -98,6 +99,14 @@ class WebinarController extends Controller
             'rating' => $request->rating,
         ]);
 
+        $certificate = Certificate::where('webinar_id', $enrollment->webinar_id)->first();
+        if ($certificate) {
+            CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $id,
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Bukti kehadiran dan review berhasil dikirim! Anda sekarang dapat mengunduh sertifikat.');
     }
 
@@ -137,13 +146,10 @@ class WebinarController extends Controller
                 return back()->with('error', 'Sertifikat belum dibuat untuk webinar ini.');
             }
 
-            $participant = CertificateParticipant::where('certificate_id', $certificate->id)
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$participant) {
-                return back()->with('error', 'Data participant sertifikat tidak ditemukan.');
-            }
+            $participant = CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $userId,
+            ]);
 
             if (!$this->pdfService) {
                 $this->pdfService = new CertificatePdfService();
@@ -196,13 +202,10 @@ class WebinarController extends Controller
                 return back()->with('error', 'Sertifikat belum dibuat untuk webinar ini.');
             }
 
-            $participant = CertificateParticipant::where('certificate_id', $certificate->id)
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$participant) {
-                return back()->with('error', 'Data participant sertifikat tidak ditemukan.');
-            }
+            $participant = CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $userId,
+            ]);
 
             if (!$this->pdfService) {
                 $this->pdfService = new CertificatePdfService();

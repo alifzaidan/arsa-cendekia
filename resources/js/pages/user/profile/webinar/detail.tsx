@@ -212,7 +212,7 @@ export default function DetailMyWebinar({ webinar, certificate, certificateParti
     const isCompleted = isWebinarFinished;
     const hasRecording = webinarData.recording_url && getYoutubeEmbedUrl(webinarData.recording_url);
     const isAttendanceVerified = webinarItem.attendance_verified;
-    const hasReview = webinarItem.review && webinarItem.rating;
+    const hasReview = Boolean(webinarItem.review);
 
     const hasCertificate = certificate && isCompleted && webinarInvoiceStatus === 'paid' && isAttendanceVerified && hasReview;
 
@@ -575,7 +575,7 @@ export default function DetailMyWebinar({ webinar, certificate, certificateParti
                                 <div className="space-y-4">
                                     <div className="rounded-lg bg-green-100 p-4 dark:bg-green-800/50">
                                         <div className="mb-2">
-                                            <StarRating rating={webinarItem.rating || 0} readonly />
+                                            <StarRating rating={webinarItem.rating || 5} readonly />
                                         </div>
                                         <p className="text-green-800 dark:text-green-200">"{webinarItem.review}"</p>
                                     </div>

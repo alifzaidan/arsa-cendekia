@@ -7,9 +7,12 @@ use App\Models\CertificateDesign;
 use App\Models\CertificateParticipant;
 use App\Models\CertificateSign;
 use App\Models\Course;
+use App\Models\Invoice;
 use App\Models\Webinar;
 use App\Services\CertificatePdfService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use ZipArchive;
 
@@ -33,6 +36,8 @@ class CertificateController extends Controller
 
     public function show(Certificate $certificate)
     {
+        $this->syncParticipants($certificate);
+
         $certificate->load([
             'design',
             'sign',
@@ -137,7 +142,8 @@ class CertificateController extends Controller
             $data['webinar_id'] = null;
         }
 
-        Certificate::create($data);
+        $certificate = Certificate::create($data);
+        $this->syncParticipants($certificate);
 
         return redirect()->route('certificates.index')
             ->with('success', 'Sertifikat berhasil ditambahkan');
@@ -200,6 +206,7 @@ class CertificateController extends Controller
         }
 
         $certificate->update($data);
+        $this->syncParticipants($certificate);
 
         return redirect()->route('certificates.show', $certificate->id)
             ->with('success', 'Sertifikat berhasil diperbarui');
@@ -255,28 +262,82 @@ class CertificateController extends Controller
     public function downloadAll(Certificate $certificate)
     {
         try {
+            $this->syncParticipants($certificate);
+
+            $certificate->load(['participants.user']);
             $participants = $certificate->participants;
 
             if ($participants->isEmpty()) {
                 return back()->with('error', 'Tidak ada peserta untuk sertifikat ini.');
             }
 
-            // Buat HTML page yang akan trigger download satu per satu
-            $downloadUrls = [];
-            foreach ($participants as $participant) {
-                $downloadUrls[] = [
-                    'url' => route('certificates.participant.download', $participant->id),
-                    'filename' => 'sertifikat-' . $participant->certificate_code . '.pdf',
-                    'participant_name' => $participant->user->name
-                ];
+            if (!class_exists('ZipArchive')) {
+                return back()->with('error', 'Ekstensi ZipArchive tidak tersedia di server.');
             }
 
-            return view('certificates.download-all', [
-                'certificate' => $certificate,
-                'downloads' => $downloadUrls
-            ]);
+            $zip = new ZipArchive();
+            $zipFileName = 'sertifikat-' . Str::slug($certificate->title) . '-' . time() . '.zip';
+            $tempDirPath = storage_path('app/temp');
+
+            if (!file_exists($tempDirPath)) {
+                mkdir($tempDirPath, 0755, true);
+            }
+
+            $zipFilePath = $tempDirPath . '/' . $zipFileName;
+
+            if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+                return back()->with('error', 'Gagal membuat file ZIP sertifikat.');
+            }
+
+            foreach ($participants as $participant) {
+                if (!$participant->user) {
+                    continue;
+                }
+
+                $pdfData = $this->pdfService->generateParticipantCertificate($participant);
+                $userName = Str::slug($participant->user->name);
+                $pdfFileName = "sertifikat-{$participant->certificate_code}-{$userName}.pdf";
+
+                $zip->addFromString($pdfFileName, $pdfData);
+            }
+
+            $zip->close();
+
+            return response()->download($zipFilePath, $zipFileName)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
+            Log::error('Error downloading all certificates: ' . $e->getMessage());
             return back()->with('error', 'Gagal memproses download: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Sync peserta yang sudah membayar tetapi belum terdaftar sebagai participant sertifikat
+     */
+    private function syncParticipants(Certificate $certificate)
+    {
+        $userIds = collect();
+
+        if ($certificate->course_id) {
+            $userIds = Invoice::where('status', 'paid')
+                ->whereHas('courseItems', function ($query) use ($certificate) {
+                    $query->where('course_id', $certificate->course_id);
+                })
+                ->pluck('user_id')
+                ->unique();
+        } elseif ($certificate->webinar_id) {
+            $userIds = Invoice::where('status', 'paid')
+                ->whereHas('webinarItems', function ($query) use ($certificate) {
+                    $query->where('webinar_id', $certificate->webinar_id);
+                })
+                ->pluck('user_id')
+                ->unique();
+        }
+
+        foreach ($userIds as $userId) {
+            CertificateParticipant::firstOrCreate([
+                'certificate_id' => $certificate->id,
+                'user_id' => $userId,
+            ]);
         }
     }
 }
